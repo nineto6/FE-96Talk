@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { error } from "console";
 import { useState } from "react";
 import Loading from "../components/Loading";
+import { useRecoilState } from "recoil";
+import { loginState } from "../utils/atoms";
 
 interface ILoginProps {
   loginId: string;
@@ -12,6 +14,8 @@ interface ILoginProps {
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+
   const nav = useNavigate();
   const {
     register,
@@ -24,6 +28,8 @@ export default function Login() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      setIsLogin(true);
+      // 로그인 상태로 변환
       // nav("/");
       nav("/");
     }, 3000);

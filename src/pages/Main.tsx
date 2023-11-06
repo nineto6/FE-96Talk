@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
-import TobBar from "../components/TopBar";
 import { useNavigate } from "react-router-dom";
+import FriendList from "../components/FriendList";
+import { useRecoilState } from "recoil";
+import { loginState } from "../utils/atoms";
+import TopBar from "../components/TopBar";
 
 export default function Main() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
   const nav = useNavigate();
 
   useEffect(() => {
     if (!isLogin) {
       nav("/login");
     }
-  }, []);
+  }, [isLogin]);
 
   return (
-    <div className="flex h-screen w-screen flex-row">
+    <div className="flex flex-row">
       {/* Container */}
       <SideBar />
-      <div className="h-full flex w-full flex-col justify-start">
-        <TobBar />
+      <div className="ml-16 h-full flex w-full flex-col justify-start">
+        <TopBar />
         {/* Body */}
         <div className="flex flex-col justify-start px-4 pt-4">
           {/* Detail Bar */}
@@ -57,6 +60,16 @@ export default function Main() {
               </svg>
             </div>
           </div>
+        </div>
+        <div className="mx-4">
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
+          <FriendList name="이준모" quote="</>" music="광화문에서" image="" />
         </div>
       </div>
     </div>
