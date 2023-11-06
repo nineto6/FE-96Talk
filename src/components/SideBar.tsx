@@ -40,7 +40,7 @@ export default function SideBar() {
         viewBox="0 0 24 24"
         fill="currentColor"
         className="w-6 h-6 cursor-pointer hover:text-white transition-colors"
-        id="chat"
+        id="chats"
         onClick={onMove}
       >
         <path

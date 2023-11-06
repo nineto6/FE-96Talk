@@ -1,22 +1,9 @@
-import { useEffect, useState } from "react";
+import ChatList from "../components/ChatList";
 import SideBar from "../components/SideBar";
-import { useNavigate } from "react-router-dom";
-import FriendList from "../components/FriendList";
-import { useRecoilState } from "recoil";
-import { loginState } from "../utils/atoms";
 import TopBar from "../components/TopBar";
-import { friends } from "../jsons/dummy";
+import { chatList } from "../jsons/dummy";
 
-export default function Main() {
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
-  const nav = useNavigate();
-
-  useEffect(() => {
-    if (!isLogin) {
-      nav("/login");
-    }
-  }, [isLogin]);
-
+export default function Chats() {
   return (
     <div className="flex flex-row">
       {/* Container */}
@@ -28,7 +15,7 @@ export default function Main() {
           {/* Detail Bar */}
           <div className="flex flex-row justify-between items-center">
             {/* title */}
-            <h2 className="text-xl font-bold">친구</h2>
+            <h2 className="text-xl font-bold">채팅</h2>
             {/* utilities */}
             <div className="bg-transparent flex flex-row gap-4">
               <svg
@@ -63,14 +50,13 @@ export default function Main() {
           </div>
         </div>
         <div className="mx-4">
-          {friends.map((friend) => (
-            <FriendList
-              key={friend.userId}
-              name={friend.name}
-              quote={friend.quote}
-              music={friend.music}
-              image={friend.image}
-              userId={friend.userId}
+          {chatList.map((room) => (
+            <ChatList
+              key={room.roomId}
+              name={room.name}
+              currentMessage={room.currentMessage}
+              date={room.date}
+              roomId={room.roomId}
             />
           ))}
         </div>
