@@ -1,6 +1,6 @@
 export default function SideBar() {
   return (
-    <div className="w-16 h-full min-h-full flex flex-col bg-orange-600 pt-9 justify-start items-center">
+    <div className="w-16 h-full min-h-full flex flex-col bg-slate-200 pt-9 justify-start items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

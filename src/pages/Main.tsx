@@ -1,7 +1,18 @@
+import { useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
 import TobBar from "../components/TopBar";
+import { useNavigate } from "react-router-dom";
 
 export default function Main() {
+  const [isLogin, setIsLogin] = useState(true);
+  const nav = useNavigate();
+
+  useEffect(() => {
+    if (!isLogin) {
+      nav("/login");
+    }
+  }, []);
+
   return (
     <div className="flex h-screen w-screen flex-row">
       {/* Container */}
@@ -15,7 +26,7 @@ export default function Main() {
             {/* title */}
             <h2>친구</h2>
             {/* utilities */}
-            <div className="bg-red-500 flex flex-row gap-4">
+            <div className="bg-transparent flex flex-row gap-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
