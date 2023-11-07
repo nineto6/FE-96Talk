@@ -1,3 +1,7 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+.custom-max-h {
+  min-height: calc(100vh - 6rem);
+}

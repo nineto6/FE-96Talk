@@ -39,3 +39,14 @@ export const chatList = [
     roomId: 2,
   },
 ];
+
+export const BubbleList = [
+  {
+    message: "안녕",
+    speaker: true,
+  },
+  {
+    message: "지금 뭐해",
+    speaker: false,
+  },
+];
