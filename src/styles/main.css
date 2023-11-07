@@ -5,3 +5,13 @@
 .custom-max-h {
   min-height: calc(100vh - 6rem);
 }
+
+@layer base {
+  body {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}

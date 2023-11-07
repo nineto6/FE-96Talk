@@ -39,7 +39,7 @@ export default function Chat() {
           </div>
         </div>
       </div>
-      <div className="bg-red-500  custom-max-h pt-20 pb-4">
+      <div className="bg-violet-300  custom-max-h pt-20 pb-4">
         {isChat.map((bubble, index) => (
           <Bubble key={index} text={bubble.message} speaker={bubble.speaker} />
         ))}
@@ -47,7 +47,7 @@ export default function Chat() {
 
       <div
         ref={chatRef}
-        className="w-full h-24 bg-red-800 flex flex-col justify-center items-center"
+        className="w-full h-24 bg-violet-100 flex flex-col justify-center items-center"
       >
         <form onSubmit={handleSubmit(onValid)}>
           <input
