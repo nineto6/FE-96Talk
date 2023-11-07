@@ -1,12 +1,24 @@
-import React, { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Main from "./pages/Main";
 import Login from "./pages/Login";
 import Chats from "./pages/Chats";
 import Profile from "./pages/Profile";
 import Chat from "./pages/Chat";
+import { useRecoilState } from "recoil";
+import { loginState } from "./utils/atoms";
 
 export default function App() {
+  const nav = useNavigate();
+
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+
+  useEffect(() => {
+    if (!isLogin) {
+      nav("/login");
+    }
+  }, [isLogin]);
+
   return (
     <Routes>
       <Route path={"/"} element={<Main />} />

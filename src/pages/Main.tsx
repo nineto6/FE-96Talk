@@ -9,15 +9,6 @@ import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
 
 export default function Main() {
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
-  const nav = useNavigate();
-
-  useEffect(() => {
-    if (!isLogin) {
-      nav("/login");
-    }
-  }, [isLogin]);
-
   return (
     <div className="flex flex-row">
       {/* Container */}
