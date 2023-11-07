@@ -1,23 +1,7 @@
-import { useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
-import { useNavigate } from "react-router-dom";
-import FriendList from "../components/FriendList";
-import { useRecoilState } from "recoil";
-import { loginState } from "../utils/atoms";
 import TopBar from "../components/TopBar";
-import { friends } from "../jsons/dummy";
-import MyProfile from "../components/MyProfile";
 
-export default function Main() {
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
-  const nav = useNavigate();
-
-  useEffect(() => {
-    if (!isLogin) {
-      nav("/login");
-    }
-  }, [isLogin]);
-
+export default function Profile() {
   return (
     <div className="flex flex-row">
       {/* Container */}
@@ -29,7 +13,7 @@ export default function Main() {
           {/* Detail Bar */}
           <div className="flex flex-row justify-between items-center">
             {/* title */}
-            <h2 className="text-xl font-bold">친구</h2>
+            <h2 className="text-xl font-bold">프로필</h2>
             {/* utilities */}
             <div className="bg-transparent flex flex-row gap-4">
               <svg
@@ -62,29 +46,8 @@ export default function Main() {
               </svg>
             </div>
           </div>
-
-          <MyProfile />
         </div>
-        <div className="relative">
-          <div className="absolute px-4 mt-3 w-full border-t border-slate-300" />
-          <div className="relative -top-0 text-center">
-            <span className="bg-white px-2 text-sm text-slate-500">
-              친구 {443}
-            </span>
-          </div>
-        </div>
-        <div className="mx-4">
-          {friends.map((friend) => (
-            <FriendList
-              key={friend.userId}
-              name={friend.name}
-              quote={friend.quote}
-              music={friend.music}
-              image={friend.image}
-              userId={friend.userId}
-            />
-          ))}
-        </div>
+        <div className="mx-4"></div>
       </div>
     </div>
   );

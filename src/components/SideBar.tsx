@@ -1,10 +1,18 @@
 import { useRecoilState } from "recoil";
 import { loginState } from "../utils/atoms";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function SideBar() {
   const [isLogin, setIslogin] = useRecoilState(loginState);
+
   const nav = useNavigate();
+  const location = useLocation();
+  let [isState, setIsState] = useState(location.pathname.split("/")[1]);
+
+  useEffect(() => {
+    setIsState(location.pathname.split("/")[1]);
+  }, [location]);
 
   const onLogout = () => {
     // console.log("LOGOUT");
@@ -12,7 +20,7 @@ export default function SideBar() {
   };
 
   const onMove = (target: React.MouseEvent<SVGElement>) => {
-    console.log(target.currentTarget.id);
+    // console.log(target.currentTarget.id);
     const dest = target.currentTarget.id;
 
     dest === "friend" ? nav("/") : nav(`/${dest}`);
@@ -24,7 +32,9 @@ export default function SideBar() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-6 h-6 cursor-pointer hover:text-white transition-colors"
+        className={`w-6 h-6 cursor-pointer hover:text-white transition-colors ${
+          isState === "" ? "text-white" : ""
+        }`}
         id="friend"
         onClick={onMove}
       >
@@ -39,7 +49,9 @@ export default function SideBar() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-6 h-6 cursor-pointer hover:text-white transition-colors"
+        className={`w-6 h-6 cursor-pointer hover:text-white transition-colors
+        ${isState === "chats" ? "text-white" : ""}
+        `}
         id="chats"
         onClick={onMove}
       >
@@ -54,7 +66,9 @@ export default function SideBar() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-6 h-6 cursor-pointer hover:text-white transition-colors"
+        className={`w-6 h-6 cursor-pointer hover:text-white transition-colors  ${
+          isState === "profile" ? "text-white" : ""
+        }`}
         id="profile"
         onClick={onMove}
       >
