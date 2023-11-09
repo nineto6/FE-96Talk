@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Chat from "./pages/Chat";
 import { useRecoilState } from "recoil";
 import { loginState } from "./utils/atoms";
+import Signup from "./pages/Signup";
 
 export default function App() {
   const nav = useNavigate();
@@ -25,6 +26,7 @@ export default function App() {
       <Route path={"/login"} element={<Login />} />
       <Route path={"/chats"} element={<Chats />} />
       <Route path={"/profile"} element={<Profile />} />
+      <Route path={"/signup"} element={<Signup />} />
       <Route path={"/chats/:roomId"} element={<Chat />} />
     </Routes>
   );

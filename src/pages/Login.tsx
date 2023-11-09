@@ -53,7 +53,7 @@ export default function Login() {
           >
             <input
               {...register("loginId", {
-                required: "아이디를 입력해주세요.",
+                required: "아이디를 입력해주세요",
               })}
               name="loginId"
               className="h-10 px-4"
@@ -61,17 +61,18 @@ export default function Login() {
             />
             <input
               {...register("loginPassword", {
-                required: "비밀번호를 입력해주세요.",
+                required: "비밀번호를 입력해주세요",
               })}
               name="loginPassword"
               className="h-10 px-4"
               placeholder="비밀번호"
+              type="password"
             />
             <button className="bg-themeDarkPurple text-white h-10">
               로 그 인
             </button>
           </form>
-          <h2>
+          <h2 className="text-center mt-2 text-themeYellow">
             {errors.loginId
               ? errors.loginId.message
               : errors.loginPassword
@@ -80,7 +81,14 @@ export default function Login() {
           </h2>
         </div>
         <div>
-          <h2>회원 가입</h2>
+          <h2
+            onClick={() => {
+              nav("/signup");
+            }}
+            className="hover:text-slate-200 transition-colors cursor-pointer"
+          >
+            회원 가입
+          </h2>
         </div>
       </div>
     </div>
