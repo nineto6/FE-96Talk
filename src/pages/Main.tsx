@@ -9,6 +9,13 @@ import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
 
 export default function Main() {
+  useEffect(() => {
+    let isToken = sessionStorage.getItem("accessToken");
+    if (isToken) {
+      const url = "";
+    }
+  }, []);
+
   return (
     <div className="flex flex-row">
       {/* Container */}

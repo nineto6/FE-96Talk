@@ -2,6 +2,7 @@ import { useRecoilState } from "recoil";
 import { loginState } from "../utils/atoms";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function SideBar() {
   const [isLogin, setIslogin] = useRecoilState(loginState);
@@ -15,8 +16,24 @@ export default function SideBar() {
   }, [location]);
 
   const onLogout = () => {
-    // console.log("LOGOUT");
-    setIslogin(false);
+    let isToken = sessionStorage.getItem("accessToken");
+    const url = "http://nineto6.kro.kr:8080/api/members/logout";
+
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${isToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 204) {
+          sessionStorage.removeItem("accessToken");
+          nav("/login");
+        } else {
+          console.log(response.data.message);
+        }
+      });
   };
 
   const onMove = (target: React.MouseEvent<SVGElement>) => {
