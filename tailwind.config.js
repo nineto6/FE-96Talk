@@ -13,6 +13,10 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
 
+      animation: {
+        "bounce-up": "bounceUp 1s ease-in-out",
+      },
+
       colors: {
         themePurple: "#715CA8",
         themeYellow: "#EFC638",

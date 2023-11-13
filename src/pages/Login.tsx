@@ -6,10 +6,11 @@ import { useState } from "react";
 import Loading from "../components/Loading";
 import { useRecoilState } from "recoil";
 import { loginState } from "../utils/atoms";
+import axios from "axios";
 
 interface ILoginProps {
-  loginId: string;
-  loginPassword: string;
+  memberEmail: string;
+  memberPwd: string;
 }
 
 export default function Login() {
@@ -24,15 +25,26 @@ export default function Login() {
     setError,
   } = useForm<ILoginProps>();
 
-  const onValid = () => {
+  const onValid = (data: ILoginProps) => {
+    const url = "http://nineto6.kro.kr:8080/api/members/login";
+    // console.log("data", data);
+
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsLogin(true);
-      // 로그인 상태로 변환
-      // nav("/");
-      nav("/");
-    }, 3000);
+    axios.post(url, data).then((response) => {
+      console.log(response);
+      if (response.data.status === 200) {
+        // 200 - login success
+        sessionStorage.setItem("accessToken", response.headers["access-token"]);
+        nav("/");
+      } else {
+        // 400 - Bad Request
+        console.log("로그인 실패");
+        nav("/login");
+      }
+      // console.log(sessionStorage.getItem("accessToken"));
+    });
+
+    setIsLoading(false);
   };
 
   return (
@@ -52,18 +64,18 @@ export default function Login() {
             className="flex flex-col w-full gap-4"
           >
             <input
-              {...register("loginId", {
+              {...register("memberEmail", {
                 required: "아이디를 입력해주세요",
               })}
-              name="loginId"
+              name="memberEmail"
               className="h-10 px-4"
               placeholder="아이디"
             />
             <input
-              {...register("loginPassword", {
+              {...register("memberPwd", {
                 required: "비밀번호를 입력해주세요",
               })}
-              name="loginPassword"
+              name="memberPwd"
               className="h-10 px-4"
               placeholder="비밀번호"
               type="password"
@@ -73,10 +85,10 @@ export default function Login() {
             </button>
           </form>
           <h2 className="text-center mt-2 text-themeYellow">
-            {errors.loginId
-              ? errors.loginId.message
-              : errors.loginPassword
-              ? errors.loginPassword.message
+            {errors.memberEmail
+              ? errors.memberEmail.message
+              : errors.memberPwd
+              ? errors.memberPwd.message
               : ""}
           </h2>
         </div>

@@ -22,6 +22,98 @@ export const friends = [
     image: "",
     userId: 3,
   },
+  {
+    name: "이준모",
+    quote: "</>",
+    music: "광화문에서",
+    image: "",
+    userId: 1,
+  },
+
+  {
+    name: "신창섭",
+    quote: "응애",
+    music: "프로미스",
+    image: "",
+    userId: 2,
+  },
+
+  {
+    name: "황인환",
+    quote: null,
+    music: "English man in NY",
+    image: "",
+    userId: 3,
+  },
+  {
+    name: "이준모",
+    quote: "</>",
+    music: "광화문에서",
+    image: "",
+    userId: 1,
+  },
+
+  {
+    name: "신창섭",
+    quote: "응애",
+    music: "프로미스",
+    image: "",
+    userId: 2,
+  },
+
+  {
+    name: "황인환",
+    quote: null,
+    music: "English man in NY",
+    image: "",
+    userId: 3,
+  },
+  {
+    name: "이준모",
+    quote: "</>",
+    music: "광화문에서",
+    image: "",
+    userId: 1,
+  },
+
+  {
+    name: "신창섭",
+    quote: "응애",
+    music: "프로미스",
+    image: "",
+    userId: 2,
+  },
+
+  {
+    name: "황인환",
+    quote: null,
+    music: "English man in NY",
+    image: "",
+    userId: 3,
+  },
+  {
+    name: "이준모",
+    quote: "</>",
+    music: "광화문에서",
+    image: "",
+    userId: 1,
+  },
+
+  {
+    name: "신창섭",
+    quote: "응애",
+    music: "프로미스",
+    image: "",
+    userId: 2,
+  },
+
+  {
+    name: "황인환",
+    quote: null,
+    music: "English man in NY",
+    image: "",
+    userId: 3,
+  },
 ];
 
 export const chatList = [
