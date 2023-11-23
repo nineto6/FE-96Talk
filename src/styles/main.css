@@ -25,3 +25,9 @@
     transform: translateY(-10px);
   }
 }
+
+@layer components {
+  .file-input::file-selector-button {
+    display: none;
+  }
+}

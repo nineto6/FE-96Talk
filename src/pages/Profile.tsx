@@ -1,11 +1,56 @@
 import { useState } from "react";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
+import { useForm } from "react-hook-form";
+
+interface IProfileProps {
+  profileImage: string;
+  nickname: string;
+  quote: string;
+}
 
 export default function Profile() {
   const [isModify, setIsModify] = useState(true);
+  const [imagePreview, setImagePreview] = useState("");
+  // re-rendering 을 하기 위한 상태 저장용
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+    reset,
+  } = useForm<IProfileProps>();
 
   const onModify = () => {
+    setIsModify((current) => !current);
+  };
+
+  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // 읽기 완료시 이미지 저장
+        const result = reader.result as string;
+        setValue("profileImage", result);
+        setImagePreview(result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // console.log(getValues("profileImage"));
+  };
+
+  const onCancel = () => {
+    reset();
+    setIsModify((current) => !current);
+    setImagePreview("");
+  };
+
+  const onValid = (data: IProfileProps) => {
+    console.log(data);
     setIsModify((current) => !current);
   };
 
@@ -58,34 +103,58 @@ export default function Profile() {
           <div className="py-8 flex flex-col justify-center items-center">
             {/* profile info */}
             {/* profile image */}
-            <span className="w-32 h-32 bg-blue-500 rounded-full relative">
-              <div
-                className={`absolute right-0 bottom-0 bg-slate-500 text-slate-800 flex justify-center items-center p-2 rounded-full cursor-pointer ${
-                  isModify && "hidden"
-                }`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
-                  <path
-                    fill-rule="evenodd"
-                    d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 01-3 3h-15a3 3 0 01-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 001.11-.71l.822-1.315a2.942 2.942 0 012.332-1.39zM6.75 12.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0zm12-1.5a.75.75 0 100-1.5.75.75 0 000 1.5z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-            </span>
 
             <div className="mt-4">
-              <form className="flex flex-col w-72 gap-2">
+              <form
+                onSubmit={handleSubmit(onValid)}
+                className="flex flex-col w-72 gap-2"
+              >
+                <div className="flex flex-col justify-center items-center">
+                  <span
+                    className="w-32 h-32 bg-blue-500 rounded-full relative"
+                    style={{
+                      backgroundImage: `url(${imagePreview})`,
+                      backgroundSize: "cover", // 이미지를 span 크기에 맞게 조절
+                      backgroundPosition: "center", // 이미지를 중앙에 위치시킴
+                    }}
+                  >
+                    <label
+                      className={`absolute right-0 bottom-0 bg-slate-200 text-slate-800 flex justify-center items-center p-2 rounded-full cursor-pointer ${
+                        isModify && "hidden"
+                      }`}
+                      htmlFor="input-file"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
+                        <path
+                          fillRule="evenodd"
+                          d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 01-3 3h-15a3 3 0 01-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 001.11-.71l.822-1.315a2.942 2.942 0 012.332-1.39zM6.75 12.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0zm12-1.5a.75.75 0 100-1.5.75.75 0 000 1.5z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </label>
+                    <input
+                      id="input-file"
+                      type="file"
+                      className="hidden"
+                      {...register("profileImage")}
+                      onChange={onImageChange}
+                    />
+                    {/* 파일 담는 input, hidden 시키고 label 을 누를 때 동작하도록 함 */}
+                  </span>
+                </div>
                 <div className="border-b-2 relative">
                   <input
                     readOnly={isModify}
                     className="h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
+                    {...register("nickname", {
+                      required: "닉네임은 반드시 입력해야 합니다.",
+                    })}
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -102,6 +171,7 @@ export default function Profile() {
                   <input
                     readOnly={isModify}
                     className="h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
+                    {...register("quote")}
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -115,16 +185,33 @@ export default function Profile() {
                   </svg>
                 </div>
                 {/* <input className="h-8 border-b-2 bg-transparent" /> */}
-              </form>
-            </div>
+                <div className="mt-8 flex flex-row justify-center gap-12">
+                  <div
+                    onClick={onModify}
+                    className={`py-2 px-6 flex justify-center items-center bg-slate-200 cursor-pointer ${
+                      !isModify && "hidden"
+                    }`}
+                  >
+                    <h3>수정하기</h3>
+                  </div>
+                  <div
+                    onClick={onCancel}
+                    className={`py-2 px-6 flex justify-center items-center bg-slate-200 cursor-pointer ${
+                      isModify && "hidden"
+                    }`}
+                  >
+                    <h3>취 소</h3>
+                  </div>
 
-            <div className="mt-8">
-              <div
-                onClick={onModify}
-                className="py-2 px-6 flex justify-center items-center bg-slate-500 cursor-pointer"
-              >
-                <h3>수정하기</h3>
-              </div>
+                  <button
+                    className={`py-2 px-6 flex justify-center items-center bg-slate-200 cursor-pointer ${
+                      isModify && "hidden"
+                    }`}
+                  >
+                    <h3>저 장</h3>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
