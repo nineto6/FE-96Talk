@@ -14,11 +14,11 @@ export default function App() {
 
   const [isLogin, setIsLogin] = useRecoilState(loginState);
 
-  useEffect(() => {
-    if (!isLogin) {
-      nav("/login");
-    }
-  }, [isLogin]);
+  // useEffect(() => {
+  //   if (!isLogin) {
+  //     nav("/login");
+  //   }
+  // }, [isLogin]);
 
   return (
     <Routes>
