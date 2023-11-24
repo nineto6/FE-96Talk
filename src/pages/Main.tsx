@@ -7,8 +7,19 @@ import { loginState } from "../utils/atoms";
 import TopBar from "../components/TopBar";
 import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
+import Search from "../components/Search";
+
+export interface IFriendProps {
+  name: string;
+  quote?: string | null;
+  music: string;
+  image: string;
+  userId: number;
+}
 
 export default function Main() {
+  const [isSearch, setIsSearch] = useState(false);
+
   useEffect(() => {
     let isToken = sessionStorage.getItem("accessToken");
     if (isToken) {
@@ -16,9 +27,16 @@ export default function Main() {
     }
   }, []);
 
+  const onToggleSearch = () => {
+    setIsSearch((current) => !current);
+  };
+
   return (
     <div className="flex flex-row">
       {/* Container */}
+      {isSearch && (
+        <Search title={"친구"} onToggleSearch={onToggleSearch} list={friends} />
+      )}
       <SideBar />
       <div className="ml-16 h-full flex w-full flex-col justify-start">
         <TopBar />
@@ -36,7 +54,8 @@ export default function Main() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-6 h-6 cursor-pointer"
+                onClick={onToggleSearch}
               >
                 <path
                   strokeLinecap="round"

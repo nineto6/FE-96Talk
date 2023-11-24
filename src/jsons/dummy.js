@@ -23,96 +23,73 @@ export const friends = [
     userId: 3,
   },
   {
-    name: "이준모",
+    name: "이이이",
     quote: "</>",
     music: "광화문에서",
     image: "",
-    userId: 1,
+    userId: 4,
   },
 
   {
-    name: "신창섭",
+    name: "신신신",
     quote: "응애",
     music: "프로미스",
     image: "",
-    userId: 2,
+    userId: 5,
   },
 
   {
-    name: "황인환",
+    name: "황황황",
     quote: null,
     music: "English man in NY",
     image: "",
-    userId: 3,
+    userId: 6,
   },
   {
-    name: "이준모",
+    name: "준준준",
     quote: "</>",
     music: "광화문에서",
     image: "",
-    userId: 1,
+    userId: 7,
   },
 
   {
-    name: "신창섭",
+    name: "창창창",
     quote: "응애",
     music: "프로미스",
     image: "",
-    userId: 2,
+    userId: 8,
   },
 
   {
-    name: "황인환",
+    name: "인인인",
     quote: null,
     music: "English man in NY",
     image: "",
-    userId: 3,
+    userId: 9,
   },
   {
-    name: "이준모",
+    name: "모모모",
     quote: "</>",
     music: "광화문에서",
     image: "",
-    userId: 1,
+    userId: 10,
   },
 
   {
-    name: "신창섭",
+    name: "섭섭섭",
     quote: "응애",
     music: "프로미스",
     image: "",
-    userId: 2,
+    userId: 11,
   },
 
   {
-    name: "황인환",
+    name: "환환환",
     quote: null,
     music: "English man in NY",
     image: "",
-    userId: 3,
-  },
-  {
-    name: "이준모",
-    quote: "</>",
-    music: "광화문에서",
-    image: "",
-    userId: 1,
-  },
-
-  {
-    name: "신창섭",
-    quote: "응애",
-    music: "프로미스",
-    image: "",
-    userId: 2,
-  },
-
-  {
-    name: "황인환",
-    quote: null,
-    music: "English man in NY",
-    image: "",
-    userId: 3,
+    userId: 12,
   },
 ];
 
