@@ -106,14 +106,14 @@ export default function Profile() {
             {/* profile info */}
             {/* profile image */}
 
-            <div className="mt-4">
+            <div className="mt-12">
               <form
                 onSubmit={handleSubmit(onValid)}
                 className="flex flex-col w-72 gap-2"
               >
                 <div className="flex flex-col justify-center items-center">
                   <span
-                    className="w-32 h-32 bg-blue-500 rounded-full relative"
+                    className="w-32 h-32 bg-violet-400 mb-4 rounded-full relative"
                     style={{
                       backgroundImage: `url(${imagePreview})`,
                       backgroundSize: "cover", // 이미지를 span 크기에 맞게 조절

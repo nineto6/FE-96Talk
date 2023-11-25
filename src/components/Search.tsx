@@ -109,6 +109,9 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
               .filter((friend) => friend.name.includes(findList))
               .map((friend) => (
                 <div
+                  onClick={() => {
+                    nav(`user/${friend.userId}`);
+                  }}
                   key={friend.userId}
                   className="hover:bg-slate-50 cursor-pointer w-full flex flex-row justify-start items-center gap-12 py-2 border-b-2 last:border-none border-dashed"
                 >

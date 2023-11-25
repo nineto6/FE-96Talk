@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
 import SideBar from "../components/SideBar";
+import Hood from "../components/Hood";
 
 export default function User() {
   const { userNumber } = useParams();
 
   return (
     <div className="flex justify-center items-center bg-violet-200">
+      <Hood title={` 님의 프로필`} />
       <div className="bg-white flex flex-col justify-center h-screen">
         <div className="mx-4">
           <div className="py-8 flex flex-col justify-center items-center">
@@ -36,8 +38,8 @@ export default function User() {
                   </div>
                 </div>
                 {/* <input className="h-8 border-b-2 bg-transparent" /> */}
-                <div className="mt-12 flex flex-row justify-around items-center text-violet-400">
-                  <div className="transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl">
+                <div className="mt-12 flex flex-row justify-around items-center text-violet-400 text-sm">
+                  <div className="transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl gap-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -53,7 +55,7 @@ export default function User() {
                     <h3 className="text-slate-700">채팅 하기</h3>
                   </div>
 
-                  <div className="transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl">
+                  <div className="gap-2 transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
