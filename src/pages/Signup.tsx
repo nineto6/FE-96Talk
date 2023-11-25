@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Hood from "../components/Hood";
 
 interface ISignupProps {
   memberEmail: string;
@@ -45,6 +46,7 @@ export default function Signup() {
 
   return (
     <div className="flex flex-col w-full h-screen bg-themePurple">
+      <Hood title="회원가입" />
       <TopBar />
       <div className="flex flex-col h-full justify-center items-center">
         {/* Logo */}

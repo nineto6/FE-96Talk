@@ -1,4 +1,5 @@
 import ChatList from "../components/ChatList";
+import Hood from "../components/Hood";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
 import { chatList } from "../jsons/dummy";
@@ -6,6 +7,7 @@ import { chatList } from "../jsons/dummy";
 export default function Chats() {
   return (
     <div className="flex flex-row">
+      <Hood title="채팅 목록" />
       {/* Container */}
       <SideBar />
       <div className="ml-16 h-full flex w-full flex-col justify-start">

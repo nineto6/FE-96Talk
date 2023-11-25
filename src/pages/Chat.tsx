@@ -4,6 +4,7 @@ import Bubble from "../components/Bubble";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import { BubbleList } from "../jsons/dummy";
+import Hood from "../components/Hood";
 
 interface IChatProps {
   message: string;
@@ -28,6 +29,7 @@ export default function Chat() {
 
   return (
     <div className="min-h-screen flex w-full flex-col justify-start">
+      <Hood title={` 님과의 채팅`} />
       <div className="relative  z-20">
         {/* other-user */}
         <div className="fixed w-full bg-violet-100 border-b transition-colors px-4 h-auto bg-transparent flex flex-row justify-between items-center gap-6 pt-2 pb-2 border-violet-50">

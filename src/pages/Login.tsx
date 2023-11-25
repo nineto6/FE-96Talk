@@ -7,6 +7,7 @@ import Loading from "../components/Loading";
 import { useRecoilState } from "recoil";
 import { loginState } from "../utils/atoms";
 import axios from "axios";
+import Hood from "../components/Hood";
 
 interface ILoginProps {
   memberEmail: string;
@@ -49,6 +50,7 @@ export default function Login() {
 
   return (
     <div className="w-screen h-screen flex-col justify-start bg-themePurple">
+      <Hood title="로그인" />
       {isLoading && <Loading />}
       <TopBar isDark={true} />
       {/* Main */}

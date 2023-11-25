@@ -2,6 +2,7 @@ import { useState } from "react";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
+import Hood from "../components/Hood";
 
 interface IProfileProps {
   profileImage: string;
@@ -56,6 +57,7 @@ export default function Profile() {
 
   return (
     <div className="flex flex-row">
+      <Hood title="프로필 수정" />
       {/* Container */}
       <SideBar />
       <div className="ml-16 h-full flex w-full flex-col justify-start">
@@ -144,6 +146,7 @@ export default function Profile() {
                       className="hidden"
                       {...register("profileImage")}
                       onChange={onImageChange}
+                      accept=".png, .jpg, .jpeg"
                     />
                     {/* 파일 담는 input, hidden 시키고 label 을 누를 때 동작하도록 함 */}
                   </span>
@@ -151,7 +154,7 @@ export default function Profile() {
                 <div className="border-b-2 relative">
                   <input
                     readOnly={isModify}
-                    className="h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
+                    className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
                     {...register("nickname", {
                       required: "닉네임은 반드시 입력해야 합니다.",
                     })}
@@ -170,7 +173,7 @@ export default function Profile() {
                 <div className="border-b-2 relative">
                   <input
                     readOnly={isModify}
-                    className="h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
+                    className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
                     {...register("quote")}
                   />
                   <svg

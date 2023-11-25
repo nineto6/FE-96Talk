@@ -8,6 +8,7 @@ import TopBar from "../components/TopBar";
 import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
 import Search from "../components/Search";
+import Hood from "../components/Hood";
 
 export interface IFriendProps {
   name: string;
@@ -33,6 +34,7 @@ export default function Main() {
 
   return (
     <div className="flex flex-row">
+      <Hood title="친구 목록" />
       {/* Container */}
       {isSearch && (
         <Search title={"친구"} onToggleSearch={onToggleSearch} list={friends} />
