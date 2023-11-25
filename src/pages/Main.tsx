@@ -9,6 +9,7 @@ import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
 import Search from "../components/Search";
 import Hood from "../components/Hood";
+import Add from "../components/Add";
 
 export interface IFriendProps {
   name: string;
@@ -20,6 +21,7 @@ export interface IFriendProps {
 
 export default function Main() {
   const [isSearch, setIsSearch] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
 
   useEffect(() => {
     let isToken = sessionStorage.getItem("accessToken");
@@ -32,6 +34,10 @@ export default function Main() {
     setIsSearch((current) => !current);
   };
 
+  const onToggleAdd = () => {
+    setIsAdd((current) => !current);
+  };
+
   return (
     <div className="flex flex-row">
       <Hood title="친구 목록" />
@@ -39,6 +45,7 @@ export default function Main() {
       {isSearch && (
         <Search title={"친구"} onToggleSearch={onToggleSearch} list={friends} />
       )}
+      {isAdd && <Add title="아이디로 친구 추가" onToggleAdd={onToggleAdd} />}
       <SideBar />
       <div className="ml-16 h-full flex w-full flex-col justify-start">
         <TopBar />
@@ -71,7 +78,8 @@ export default function Main() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-6 h-6 cursor-pointer"
+                onClick={onToggleAdd}
               >
                 <path
                   strokeLinecap="round"

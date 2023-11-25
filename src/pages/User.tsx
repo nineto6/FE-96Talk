@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import Hood from "../components/Hood";
+import TopBar from "../components/TopBar";
 
 export default function User() {
   const { userNumber } = useParams();
@@ -8,8 +9,10 @@ export default function User() {
   return (
     <div className="flex justify-center items-center bg-violet-200">
       <Hood title={` 님의 프로필`} />
-      <div className="bg-white flex flex-col justify-center h-screen">
-        <div className="mx-4">
+      <div className="bg-white flex flex-col justify-start h-screen">
+        <TopBar />
+
+        <div className="mx-4 mt-24">
           <div className="py-8 flex flex-col justify-center items-center">
             {/* profile info */}
             {/* profile image */}

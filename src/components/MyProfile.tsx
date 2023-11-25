@@ -13,6 +13,7 @@ export default function MyProfile() {
         <div className="h-16 w-16 bg-violet-200 rounded-3xl" />
         <div className="flex flex-col justify-around">
           <b className="text-slate-700 text-md">이준모</b>
+          <p className="text-slate-500 text-sm">안녕</p>
         </div>
       </div>
       <p
