@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IFriendProps } from "../pages/Main";
+import { useNavigate } from "react-router-dom";
 
 interface ISearchDataProps {
   searchData: string;
@@ -14,6 +15,7 @@ interface ISearchProps {
 
 export default function Search({ title, onToggleSearch, list }: ISearchProps) {
   const [findList, setFindList] = useState("");
+  const nav = useNavigate();
 
   const {
     register,
@@ -23,15 +25,43 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
     setValue,
   } = useForm<ISearchDataProps>();
 
-  const onFindList = (event: any) => {
+  const onFindList = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setFindList(value);
     setValue("searchData", value);
   };
 
+  const onValid = () => {};
+
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setIsVisible(true);
+      }
+    });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="bg-slate-500 bg-opacity-25 h-full w-full z-50 fixed flex flex-col justify-center items-center">
-      <div className="rounded-md shadow-xl flex flex-col justify-center items-start w-2/3 h-auto p-12 bg-white opacity-none">
+      <div
+        ref={ref}
+        className={`${
+          isVisible ? "animate-bounce-up " : ""
+        } rounded-md shadow-xl flex flex-col justify-center items-start w-2/3 h-auto p-12 bg-white opacity-none`}
+      >
         <div className="flex flex-row items-center w-full justify-end mb-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +82,7 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
           </svg>
         </div>
         <h2 className="text-lg text-slate-800 font-bold mb-4">{title} 찾기</h2>
-        <form className="w-full">
+        <form className="w-full" onSubmit={handleSubmit(onValid)}>
           <div className="flex gap-4">
             <input
               {...register("searchData", {
@@ -60,6 +90,7 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
               })}
               onChange={onFindList}
               className="border-b-2 w-full focus:outline-none"
+              autoComplete="off"
             />
             <button className="py-2 px-4 bg-violet-400 w-24 focus:outline-none text-slate-200">
               검 색

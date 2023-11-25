@@ -39,7 +39,7 @@ export const friends = [
   },
 
   {
-    name: "황황황",
+    name: "황이황",
     quote: null,
     music: "English man in NY",
     image: "",
@@ -62,7 +62,7 @@ export const friends = [
   },
 
   {
-    name: "인인인",
+    name: "인이인",
     quote: null,
     music: "English man in NY",
     image: "",
