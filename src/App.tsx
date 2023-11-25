@@ -8,6 +8,7 @@ import Chat from "./pages/Chat";
 import { useRecoilState } from "recoil";
 import { loginState } from "./utils/atoms";
 import Signup from "./pages/Signup";
+import User from "./pages/User";
 
 export default function App() {
   const nav = useNavigate();
@@ -28,6 +29,7 @@ export default function App() {
       <Route path={"/profile"} element={<Profile />} />
       <Route path={"/signup"} element={<Signup />} />
       <Route path={"/chats/:roomId"} element={<Chat />} />
+      <Route path={"/user/:userNumber"} element={<User />} />
     </Routes>
   );
 }
