@@ -1,10 +1,20 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import Hood from "../components/Hood";
 import TopBar from "../components/TopBar";
 
 export default function User() {
   const { userNumber } = useParams();
+  const nav = useNavigate();
+
+  const onChat = () => {
+    nav(`/chats/${userNumber}`);
+  };
+
+  const onAdd = () => {
+    nav("/");
+    // ADD FRIEND LOGIC 추후 추가
+  };
 
   return (
     <div className="flex justify-center items-center bg-violet-200">
@@ -42,7 +52,10 @@ export default function User() {
                 </div>
                 {/* <input className="h-8 border-b-2 bg-transparent" /> */}
                 <div className="mt-12 flex flex-row justify-around items-center text-violet-400 text-sm">
-                  <div className="transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl gap-2">
+                  <div
+                    onClick={onChat}
+                    className="transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl gap-2"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -58,7 +71,10 @@ export default function User() {
                     <h3 className="text-slate-700">채팅 하기</h3>
                   </div>
 
-                  <div className="gap-2 transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl">
+                  <div
+                    onClick={onAdd}
+                    className="gap-2 transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
