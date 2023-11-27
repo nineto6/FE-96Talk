@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
 import { error } from "console";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import { useRecoilState } from "recoil";
 import { loginState } from "../utils/atoms";
@@ -27,7 +27,7 @@ export default function Login() {
   } = useForm<ILoginProps>();
 
   const onValid = (data: ILoginProps) => {
-    const url = "http://nineto6.kro.kr:8080/api/members/login";
+    const url = "http://nineto6.kro.kr:8080/api/auth/login";
     // console.log("data", data);
 
     setIsLoading(true);
@@ -35,7 +35,7 @@ export default function Login() {
       console.log(response);
       if (response.data.status === 200) {
         // 200 - login success
-        sessionStorage.setItem("accessToken", response.headers["access-token"]);
+        sessionStorage.setItem("accessToken", response.data.result["AT"]);
         nav("/");
       } else {
         // 400 - Bad Request
@@ -47,6 +47,8 @@ export default function Login() {
 
     setIsLoading(false);
   };
+
+  useEffect(() => {}, []);
 
   return (
     <div className="w-screen h-screen flex-col justify-start bg-themePurple">

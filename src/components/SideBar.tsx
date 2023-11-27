@@ -17,17 +17,17 @@ export default function SideBar() {
 
   const onLogout = () => {
     let isToken = sessionStorage.getItem("accessToken");
-    const url = "http://nineto6.kro.kr:8080/api/members/logout";
+    const url = "http://nineto6.kro.kr:8080/api/auth";
 
     axios
-      .get(url, {
+      .delete(url, {
         headers: {
           Authorization: `Bearer ${isToken}`,
         },
       })
       .then((response) => {
         console.log(response);
-        if (response.data.status === 204) {
+        if (response.data.status === 200) {
           sessionStorage.removeItem("accessToken");
           nav("/login");
         } else {

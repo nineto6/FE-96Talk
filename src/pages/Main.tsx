@@ -10,6 +10,9 @@ import MyProfile from "../components/MyProfile";
 import Search from "../components/Search";
 import Hood from "../components/Hood";
 import Add from "../components/Add";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 export interface IFriendProps {
   name: string;
@@ -26,7 +29,7 @@ export default function Main() {
   useEffect(() => {
     let isToken = sessionStorage.getItem("accessToken");
     if (isToken) {
-      const url = "";
+      const url = "http://nineto6.kro.kr:8080/api/friends";
     }
   }, []);
 

@@ -1,18 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
 import Hood from "../components/Hood";
+import axios from "axios";
+import { access } from "fs";
+import { useNavigate } from "react-router-dom";
 
 interface IProfileProps {
-  profileImage: string;
-  nickname: string;
-  quote: string;
+  imageFile: string | null;
+  profileStateMessage: string;
+  type: string | null;
 }
 
 export default function Profile() {
   const [isModify, setIsModify] = useState(true);
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [isName, setIsName] = useState("");
+
+  const nav = useNavigate();
+
+  const [isData, setIsData] = useState<IProfileProps>({
+    imageFile: null,
+    profileStateMessage: "",
+    type: null,
+  });
   // re-rendering 을 하기 위한 상태 저장용
 
   const {
@@ -35,13 +47,13 @@ export default function Profile() {
       reader.onloadend = () => {
         // 읽기 완료시 이미지 저장
         const result = reader.result as string;
-        setValue("profileImage", result);
+        setValue("imageFile", result);
         setImagePreview(result);
       };
       reader.readAsDataURL(file);
     }
 
-    // console.log(getValues("profileImage"));
+    // console.log(getValues("imageFile"));
   };
 
   const onCancel = () => {
@@ -51,9 +63,96 @@ export default function Profile() {
   };
 
   const onValid = (data: IProfileProps) => {
+    console.log(typeof data.imageFile);
+    const formData = new FormData();
+    data.imageFile && formData.append("imageFile", data.imageFile[0]); // 이미지 파일
+    data.profileStateMessage &&
+      formData.append("profileStateMessage", data.profileStateMessage);
+
     console.log(data);
     setIsModify((current) => !current);
+
+    let token = sessionStorage.getItem("accessToken");
+
+    let url = "http://nineto6.kro.kr:8080/api/profiles";
+    axios
+      .patch(url, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        nav("/");
+        // setImagePreview(response.data.result.)
+      });
   };
+
+  // const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   let value = event.target.value;
+  //   setIsData((current) => {
+  //     return { ...current, memberNm: value };
+  //   });
+  // };
+
+  const onChangeQuote = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let value = event.target.value;
+    setIsData((current) => {
+      return { ...current, profileStateMessage: value };
+    });
+  };
+
+  useEffect(() => {
+    let url = "http://nineto6.kro.kr:8080/api/profiles";
+    let accessToken = sessionStorage.getItem("accessToken");
+    let type = "";
+    let imageName = "";
+
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        imageName = response.data.result.imageName;
+        type = response.data.result.type;
+
+        setIsName(response.data.result.memberNm);
+        setImagePreview(response.data.result.imageFile);
+
+        setIsData((current) => {
+          return {
+            ...current,
+            profileStateMessage: response.data.result.profileStateMessage,
+            imageFile: response.data.result.imageFile,
+            type: response.data.result.type,
+          };
+        });
+      })
+      .then(() => {
+        let imgUrl = `${url}/images/${imageName}`;
+        console.log(isData.type);
+        axios
+          .get(imgUrl, {
+            headers: {
+              Accept: `${type}`,
+              Authorization: `Bearer ${accessToken}`,
+            },
+            responseType: "blob", // 중요: 응답을 Blob으로 받음
+          })
+          .then((response) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(response.data);
+            reader.onloadend = () => {
+              const base64data = reader.result as string;
+              setImagePreview(base64data);
+            };
+          });
+      });
+  }, []);
 
   return (
     <div className="flex flex-row">
@@ -144,7 +243,7 @@ export default function Profile() {
                       id="input-file"
                       type="file"
                       className="hidden"
-                      {...register("profileImage")}
+                      {...register("imageFile")}
                       onChange={onImageChange}
                       accept=".png, .jpg, .jpeg"
                     />
@@ -152,13 +251,13 @@ export default function Profile() {
                   </span>
                 </div>
                 <div className="border-b-2 relative">
-                  <input
-                    readOnly={isModify}
+                  <div
                     className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
-                    {...register("nickname", {
-                      required: "닉네임은 반드시 입력해야 합니다.",
-                    })}
-                  />
+                    // value={isData.memberNm}
+                    // onChange={onChangeName}
+                  >
+                    <h2>{isName}</h2>
+                  </div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -174,7 +273,9 @@ export default function Profile() {
                   <input
                     readOnly={isModify}
                     className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
-                    {...register("quote")}
+                    {...register("profileStateMessage")}
+                    onChange={onChangeQuote}
+                    value={isData?.profileStateMessage}
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

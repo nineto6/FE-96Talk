@@ -31,7 +31,7 @@ export default function Signup() {
       });
     } else {
       // 두 값이 같을 때
-      const url = "http://nineto6.kro.kr:8080/api/members/signup";
+      const url = "http://nineto6.kro.kr:8080/api/members";
 
       axios.post(url, data).then((response) => {
         if (response.data.status === 201) {
@@ -79,7 +79,7 @@ export default function Signup() {
               name="memberPwd"
               className="h-10 px-4"
               placeholder="비밀번호"
-              type="memberPwd"
+              type="password"
             />
 
             <input
@@ -89,7 +89,7 @@ export default function Signup() {
               name="memberPwdCheck"
               className="h-10 px-4"
               placeholder="비밀번호 확인"
-              type="memberPwd"
+              type="password"
             />
             <button className="bg-themeDarkPurple text-white h-10">
               회원 가입
