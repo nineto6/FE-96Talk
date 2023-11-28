@@ -6,6 +6,11 @@ import Hood from "../components/Hood";
 import axios from "axios";
 import { access } from "fs";
 import { useNavigate } from "react-router-dom";
+import {
+  getProfileData,
+  getProfileImage,
+  patchProfileData,
+} from "../apis/apis";
 
 export interface IProfileProps {
   imageFile: string | null;
@@ -18,6 +23,8 @@ export default function Profile() {
   const [imagePreview, setImagePreview] = useState<string>("");
   const [isName, setIsName] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imageName, setImageName] = useState("");
+  const [type, setType] = useState("");
 
   const nav = useNavigate();
 
@@ -61,7 +68,7 @@ export default function Profile() {
     setImagePreview("");
   };
 
-  const onValid = (data: IProfileProps) => {
+  const onValid = async (data: IProfileProps) => {
     // console.log(typeof data.imageFile);
     const formData = new FormData();
     if (selectedFile) {
@@ -71,30 +78,11 @@ export default function Profile() {
     formData.append("profileStateMessage", data.profileStateMessage);
 
     setIsModify((current) => !current);
-
-    let token = sessionStorage.getItem("accessToken");
-
-    let url = "http://nineto6.kro.kr:8080/api/profiles";
-    axios
-      .patch(url, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        nav("/");
-        // setImagePreview(response.data.result.)
-      });
+    const request = await patchProfileData(formData).then((response) => {
+      console.log(response);
+      nav("/");
+    });
   };
-
-  // const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   let value = event.target.value;
-  //   setIsData((current) => {
-  //     return { ...current, memberNm: value };
-  //   });
-  // };
 
   const onChangeQuote = (event: React.ChangeEvent<HTMLInputElement>) => {
     let value = event.target.value;
@@ -104,54 +92,40 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    let url = "http://nineto6.kro.kr:8080/api/profiles";
-    let accessToken = sessionStorage.getItem("accessToken");
-    let type = "";
-    let imageName = "";
+    const getRequest = async () => {
+      try {
+        const profileResponse = await getProfileData();
+        const { imageName, type, memberNm, imageFile, profileStateMessage } =
+          profileResponse.data.result;
 
-    axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        imageName = response.data.result.imageName;
-        type = response.data.result.type;
+        // 상태 업데이트
+        setIsName(memberNm);
+        setImagePreview(imageFile);
+        setImageName(imageName);
+        setType(type);
 
-        setIsName(response.data.result.memberNm);
-        setImagePreview(response.data.result.imageFile);
+        setIsData((current) => ({
+          ...current,
+          profileStateMessage,
+          imageFile,
+          type,
+        }));
 
-        setIsData((current) => {
-          return {
-            ...current,
-            profileStateMessage: response.data.result.profileStateMessage,
-            imageFile: response.data.result.imageFile,
-            type: response.data.result.type,
+        if (imageName && type) {
+          const imageResponse = await getProfileImage(imageName, type);
+          const reader = new FileReader();
+          reader.readAsDataURL(imageResponse.data);
+          reader.onloadend = () => {
+            const base64data = reader.result as string;
+            setImagePreview(base64data);
           };
-        });
-      })
-      .then(() => {
-        let imgUrl = `${url}/images/${imageName}`;
-        console.log(isData.type);
-        axios
-          .get(imgUrl, {
-            headers: {
-              Accept: `${type}`,
-              Authorization: `Bearer ${accessToken}`,
-            },
-            responseType: "blob", // 중요: 응답을 Blob으로 받음
-          })
-          .then((response) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(response.data);
-            reader.onloadend = () => {
-              const base64data = reader.result as string;
-              setImagePreview(base64data);
-            };
-          });
-      });
+        }
+      } catch (error) {
+        console.error("Error in getRequest:", error);
+      }
+    };
+
+    getRequest();
   }, []);
 
   return (
@@ -275,7 +249,7 @@ export default function Profile() {
                     className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
                     {...register("profileStateMessage")}
                     onChange={onChangeQuote}
-                    value={isData?.profileStateMessage}
+                    value={isData?.profileStateMessage || ""}
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -3,7 +3,7 @@ import { Interface } from "readline";
 import { ILoginProps } from "../pages/Login";
 import { ISignupProps } from "../pages/Signup";
 
-const BASE_URL = "http://nineto6.kro.kr:8080/";
+const BASE_URL = "https://nineto6.p-e.kr/";
 
 export async function postLogin(data: ILoginProps): Promise<boolean> {
   const url = `${BASE_URL}api/auth/login`;
@@ -34,9 +34,41 @@ export async function postSignup(data: ISignupProps): Promise<boolean> {
   });
 }
 
-export function getProfileData(data: any, url: string) {}
+export async function getProfileData() {
+  let url = `${BASE_URL}api/profiles`;
+  let accessToken = sessionStorage.getItem("accessToken");
 
-export function getProfileImage(data: any, url: string) {}
+  return axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+export function getProfileImage(imageName: string, type: string) {
+  let url = `${BASE_URL}api/profiles/images/${imageName}`;
+  let accessToken = sessionStorage.getItem("accessToken");
+
+  return axios.get(url, {
+    headers: {
+      Accept: `${type}`,
+      Authorization: `Bearer ${accessToken}`,
+    },
+    responseType: "blob", // 중요: 응답을 Blob으로 받음
+  });
+}
+
+export async function patchProfileData(formData: FormData) {
+  let token = sessionStorage.getItem("accessToken");
+
+  let url = `${BASE_URL}api/profiles`;
+  return axios.patch(url, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
 
 export function getFriendList(data: any, url: string) {}
 
