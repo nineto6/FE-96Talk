@@ -8,8 +8,9 @@ import { useRecoilState } from "recoil";
 import { loginState } from "../utils/atoms";
 import axios from "axios";
 import Hood from "../components/Hood";
+import { postLogin } from "../apis/apis";
 
-interface ILoginProps {
+export interface ILoginProps {
   memberEmail: string;
   memberPwd: string;
 }
@@ -26,26 +27,20 @@ export default function Login() {
     setError,
   } = useForm<ILoginProps>();
 
-  const onValid = (data: ILoginProps) => {
-    const url = "http://nineto6.kro.kr:8080/api/auth/login";
-    // console.log("data", data);
-
-    setIsLoading(true);
-    axios.post(url, data).then((response) => {
-      console.log(response);
-      if (response.data.status === 200) {
-        // 200 - login success
-        sessionStorage.setItem("accessToken", response.data.result["AT"]);
+  const onValid = async (data: ILoginProps) => {
+    try {
+      setIsLoading(true);
+      const success = await postLogin(data);
+      if (success) {
+        // 성공 시 홈화면으로 return
         nav("/");
-      } else {
-        // 400 - Bad Request
-        console.log("로그인 실패");
-        nav("/login");
+        console.log("LOGIN SUCCESS");
       }
-      // console.log(sessionStorage.getItem("accessToken"));
-    });
-
-    setIsLoading(false);
+    } catch (error) {
+      console.error("LOGIN FAILED", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {}, []);
