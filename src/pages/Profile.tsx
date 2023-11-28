@@ -17,6 +17,7 @@ export default function Profile() {
   const [isModify, setIsModify] = useState(true);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [isName, setIsName] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const nav = useNavigate();
 
@@ -43,17 +44,15 @@ export default function Profile() {
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
+      setSelectedFile(file); // 파일 상태 저장
+
+      // 파일 미리보기 생성
       const reader = new FileReader();
       reader.onloadend = () => {
-        // 읽기 완료시 이미지 저장
-        const result = reader.result as string;
-        setValue("imageFile", result);
-        setImagePreview(result);
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
-
-    // console.log(getValues("imageFile"));
   };
 
   const onCancel = () => {
@@ -63,13 +62,14 @@ export default function Profile() {
   };
 
   const onValid = (data: IProfileProps) => {
-    console.log(typeof data.imageFile);
+    // console.log(typeof data.imageFile);
     const formData = new FormData();
-    data.imageFile && formData.append("imageFile", data.imageFile[0]); // 이미지 파일
-    data.profileStateMessage &&
-      formData.append("profileStateMessage", data.profileStateMessage);
+    if (selectedFile) {
+      formData.append("imageFile", selectedFile);
+    }
 
-    console.log(data);
+    formData.append("profileStateMessage", data.profileStateMessage);
+
     setIsModify((current) => !current);
 
     let token = sessionStorage.getItem("accessToken");
