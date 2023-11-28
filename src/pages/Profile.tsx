@@ -7,7 +7,7 @@ import axios from "axios";
 import { access } from "fs";
 import { useNavigate } from "react-router-dom";
 
-interface IProfileProps {
+export interface IProfileProps {
   imageFile: string | null;
   profileStateMessage: string;
   type: string | null;

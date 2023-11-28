@@ -3,18 +3,21 @@ import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Hood from "../components/Hood";
+import { postSignup } from "../apis/apis";
+import { useState } from "react";
+import Loading from "../components/Loading";
 
-interface ISignupProps {
+export interface ISignupProps {
   memberEmail: string;
   memberNm: string;
   memberPwd: string;
   memberPwdCheck: string;
 }
 
-interface ISendDataProps {}
-
 export default function Signup() {
   const nav = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -22,8 +25,8 @@ export default function Signup() {
     setError,
   } = useForm<ISignupProps>();
 
-  const onValid = (data: ISignupProps) => {
-    console.log(data);
+  const onValid = async (data: ISignupProps) => {
+    // console.log(data);
     if (data.memberPwd !== data.memberPwdCheck) {
       setError("memberPwdCheck", {
         type: "server",
@@ -31,16 +34,19 @@ export default function Signup() {
       });
     } else {
       // 두 값이 같을 때
-      const url = "http://nineto6.kro.kr:8080/api/members";
-
-      axios.post(url, data).then((response) => {
-        if (response.data.status === 201) {
-          console.log(response.data.message);
+      try {
+        setIsLoading(true);
+        const success = await postSignup(data);
+        if (success) {
+          // 성공했을 시
+          console.log("Singup Success");
           nav("/login");
-        } else {
-          console.log(response.data.message);
         }
-      });
+      } catch (error) {
+        console.error("Signup failed", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -48,6 +54,7 @@ export default function Signup() {
     <div className="flex flex-col w-full h-screen bg-themePurple">
       <Hood title="회원가입" />
       <TopBar />
+      {isLoading && <Loading />}
       <div className="flex flex-col h-full justify-center items-center">
         {/* Logo */}
 
