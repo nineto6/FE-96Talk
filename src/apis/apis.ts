@@ -5,7 +5,7 @@ import { ISignupProps } from "../pages/Signup";
 
 const BASE_URL = "http://nineto6.kro.kr:8080/";
 
-export function postLogin(data: ILoginProps): Promise<boolean> {
+export async function postLogin(data: ILoginProps): Promise<boolean> {
   const url = `${BASE_URL}api/auth/login`;
 
   return axios.post(url, data).then((response) => {
@@ -21,13 +21,12 @@ export function postLogin(data: ILoginProps): Promise<boolean> {
   });
 }
 
-export function postSignup(data: ISignupProps): Promise<boolean> {
+export async function postSignup(data: ISignupProps): Promise<boolean> {
   const url = `${BASE_URL}api/members`;
 
   return axios.post(url, data).then((response) => {
     if (response.data.status === 201) {
       //   console.log(response.data.message);
-
       return true;
     } else {
       throw new Error("회원가입 실패");
