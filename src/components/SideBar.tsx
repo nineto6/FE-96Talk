@@ -3,9 +3,12 @@ import { loginState } from "../utils/atoms";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { deleteLogout } from "../apis/apis";
+import Loading from "./Loading";
 
 export default function SideBar() {
   const [isLogin, setIslogin] = useRecoilState(loginState);
+  const [isLoading, setIsLoading] = useState(false);
 
   const nav = useNavigate();
   const location = useLocation();
@@ -15,25 +18,20 @@ export default function SideBar() {
     setIsState(location.pathname.split("/")[1]);
   }, [location]);
 
-  const onLogout = () => {
-    let isToken = sessionStorage.getItem("accessToken");
-    const url = "http://nineto6.kro.kr:8080/api/auth";
-
-    axios
-      .delete(url, {
-        headers: {
-          Authorization: `Bearer ${isToken}`,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.data.status === 200) {
-          sessionStorage.removeItem("accessToken");
-          nav("/login");
-        } else {
-          console.log(response.data.message);
-        }
-      });
+  const onLogout = async () => {
+    try {
+      setIsLoading(true);
+      const request = await deleteLogout();
+      if (request) {
+        // 정상적으로 제거 되면
+        sessionStorage.removeItem("accessToken");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+      nav("/login");
+    }
   };
 
   const onMove = (target: React.MouseEvent<SVGElement>) => {

@@ -13,6 +13,7 @@ import Add from "../components/Add";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
+// Cookie 를 사용하기 위함
 
 export interface IFriendProps {
   name: string;

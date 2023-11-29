@@ -2,6 +2,7 @@ import axios from "axios";
 import { Interface } from "readline";
 import { ILoginProps } from "../pages/Login";
 import { ISignupProps } from "../pages/Signup";
+import Cookies from "js-cookie";
 
 const BASE_URL = "https://nineto6.p-e.kr/";
 
@@ -9,7 +10,7 @@ export async function postLogin(data: ILoginProps): Promise<boolean> {
   const url = `${BASE_URL}api/auth/login`;
 
   return axios.post(url, data).then((response) => {
-    console.log(response);
+    // console.log(response);
     if (response.data.status === 200) {
       // 200 - login success
       sessionStorage.setItem("accessToken", response.data.result["AT"]);
@@ -68,6 +69,27 @@ export async function patchProfileData(formData: FormData) {
       "Content-Type": "multipart/form-data",
     },
   });
+}
+
+export async function deleteLogout(): Promise<boolean> {
+  let isToken = sessionStorage.getItem("accessToken");
+  const url = `${BASE_URL}api/auth`;
+
+  return axios
+    .delete(url, {
+      headers: {
+        Authorization: `Bearer ${isToken}`,
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      if (response.data.status === 200) {
+        return true;
+      } else {
+        throw new Error("로그아웃 실패");
+        // console.log(response.data.message);
+      }
+    });
 }
 
 export function getFriendList(data: any, url: string) {}
