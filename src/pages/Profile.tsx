@@ -11,6 +11,7 @@ import {
   getProfileImage,
   patchProfileData,
 } from "../apis/apis";
+import Loading from "../components/Loading";
 
 export interface IProfileProps {
   imageFile: string | null;
@@ -25,6 +26,7 @@ export default function Profile() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageName, setImageName] = useState("");
   const [type, setType] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const nav = useNavigate();
 
@@ -94,6 +96,7 @@ export default function Profile() {
   useEffect(() => {
     const getRequest = async () => {
       try {
+        setIsLoading(true);
         const profileResponse = await getProfileData();
         const { imageName, type, memberNm, imageFile, profileStateMessage } =
           profileResponse.data.result;
@@ -122,6 +125,10 @@ export default function Profile() {
         }
       } catch (error) {
         console.error("Error in getRequest:", error);
+        nav("/login");
+        // 다시 로그인하게 유도
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -133,6 +140,7 @@ export default function Profile() {
       <Hood title="프로필 수정" />
       {/* Container */}
       <SideBar />
+      {isLoading && <Loading />}
       <div className="ml-16 h-full flex w-full flex-col justify-start">
         <TopBar />
         {/* Body */}

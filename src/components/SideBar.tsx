@@ -43,6 +43,7 @@ export default function SideBar() {
 
   return (
     <div className="fixed w-16 h-full min-h-full flex flex-col bg-themePurple text-themeDarkPurple pt-9 justify-start items-center gap-12">
+      {isLoading && <Loading />}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

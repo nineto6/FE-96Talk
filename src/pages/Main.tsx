@@ -96,7 +96,7 @@ export default function Main() {
 
           <MyProfile />
         </div>
-        <div className="relative">
+        <div className="relative -z-10">
           <div className="absolute px-4 mt-3 w-full border-t border-slate-300" />
           <div className="relative -top-0 text-center">
             <span className="bg-white px-2 text-sm text-slate-500">
