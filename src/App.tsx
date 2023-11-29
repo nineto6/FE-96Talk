@@ -11,16 +11,6 @@ import Signup from "./pages/Signup";
 import User from "./pages/User";
 
 export default function App() {
-  const nav = useNavigate();
-
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
-
-  // useEffect(() => {
-  //   if (!isLogin) {
-  //     nav("/login");
-  //   }
-  // }, [isLogin]);
-
   return (
     <Routes>
       <Route path={"/"} element={<Main />} />

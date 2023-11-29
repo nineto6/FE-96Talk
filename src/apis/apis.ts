@@ -2,12 +2,9 @@ import axios from "axios";
 import { Interface } from "readline";
 import { ILoginProps } from "../pages/Login";
 import { ISignupProps } from "../pages/Signup";
-import Cookies from "js-cookie";
-
-const BASE_URL = "https://nineto6.p-e.kr/";
 
 export async function postLogin(data: ILoginProps): Promise<boolean> {
-  const url = `${BASE_URL}api/auth/login`;
+  const url = `${process.env.REACT_APP_BASE_URL}api/auth/login`;
 
   return axios.post(url, data).then((response) => {
     // console.log(response);
@@ -23,7 +20,7 @@ export async function postLogin(data: ILoginProps): Promise<boolean> {
 }
 
 export async function postSignup(data: ISignupProps): Promise<boolean> {
-  const url = `${BASE_URL}api/members`;
+  const url = `${process.env.REACT_APP_BASE_URL}api/members`;
 
   return axios.post(url, data).then((response) => {
     if (response.data.status === 201) {
@@ -36,7 +33,7 @@ export async function postSignup(data: ISignupProps): Promise<boolean> {
 }
 
 export async function getProfileData() {
-  let url = `${BASE_URL}api/profiles`;
+  let url = `${process.env.REACT_APP_BASE_URL}api/profiles`;
   let accessToken = sessionStorage.getItem("accessToken");
 
   return axios.get(url, {
@@ -47,7 +44,7 @@ export async function getProfileData() {
 }
 
 export function getProfileImage(imageName: string, type: string) {
-  let url = `${BASE_URL}api/profiles/images/${imageName}`;
+  let url = `${process.env.REACT_APP_BASE_URL}api/profiles/images/${imageName}`;
   let accessToken = sessionStorage.getItem("accessToken");
 
   return axios.get(url, {
@@ -62,7 +59,7 @@ export function getProfileImage(imageName: string, type: string) {
 export async function patchProfileData(formData: FormData) {
   let token = sessionStorage.getItem("accessToken");
 
-  let url = `${BASE_URL}api/profiles`;
+  let url = `${process.env.REACT_APP_BASE_URL}api/profiles`;
   return axios.patch(url, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -73,7 +70,7 @@ export async function patchProfileData(formData: FormData) {
 
 export async function deleteLogout(): Promise<boolean> {
   let isToken = sessionStorage.getItem("accessToken");
-  const url = `${BASE_URL}api/auth`;
+  const url = `${process.env.REACT_APP_BASE_URL}api/auth`;
 
   return axios
     .delete(url, {
