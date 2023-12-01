@@ -9,7 +9,7 @@ import Loading from "../components/Loading";
 
 export interface ISignupProps {
   memberEmail: string;
-  memberNm: string;
+  memberNickname: string;
   memberPwd: string;
   memberPwdCheck: string;
 }
@@ -72,10 +72,10 @@ export default function Signup() {
               placeholder="아이디"
             />
             <input
-              {...register("memberNm", {
+              {...register("memberNickname", {
                 required: "닉네임을 입력하세요.",
               })}
-              name="memberNm"
+              name="memberNickname"
               className="h-10 px-4"
               placeholder="닉네임"
             />
@@ -107,8 +107,8 @@ export default function Signup() {
               ? errors.memberEmail.message
               : errors.memberPwd
               ? errors.memberPwd.message
-              : errors.memberNm
-              ? errors.memberNm.message
+              : errors.memberNickname
+              ? errors.memberNickname.message
               : errors.memberPwdCheck
               ? errors.memberPwdCheck.message
               : ""}

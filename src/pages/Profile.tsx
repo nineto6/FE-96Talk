@@ -98,11 +98,18 @@ export default function Profile() {
       try {
         setIsLoading(true);
         const profileResponse = await getProfileData();
-        const { imageName, type, memberNm, imageFile, profileStateMessage } =
-          profileResponse.data.result;
+        console.log(profileResponse);
+
+        const {
+          imageName,
+          type,
+          memberNickname,
+          imageFile,
+          profileStateMessage,
+        } = profileResponse.data.result;
 
         // 상태 업데이트
-        setIsName(memberNm);
+        setIsName(memberNickname);
         setImagePreview(imageFile);
         setImageName(imageName);
         setType(type);
@@ -235,7 +242,7 @@ export default function Profile() {
                 <div className="border-b-2 relative">
                   <div
                     className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800"
-                    // value={isData.memberNm}
+                    // value={isData.memberNickname}
                     // onChange={onChangeName}
                   >
                     <h2>{isName}</h2>
