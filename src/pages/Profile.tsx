@@ -98,7 +98,7 @@ export default function Profile() {
       try {
         setIsLoading(true);
         const profileResponse = await getProfileData();
-        console.log(profileResponse);
+        // console.log(profileResponse);
 
         const {
           imageName,

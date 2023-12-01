@@ -34,10 +34,10 @@ export default function Login() {
       if (success) {
         // 성공 시 홈화면으로 return
         nav("/");
-        console.log("LOGIN SUCCESS");
+        console.log("Login Success");
       }
     } catch (error) {
-      console.error("LOGIN FAILED", error);
+      console.error("Login Failed", error);
     } finally {
       setIsLoading(false);
     }

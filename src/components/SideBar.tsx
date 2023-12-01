@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { deleteLogout } from "../apis/apis";
 import Loading from "./Loading";
+import Cookies from "js-cookie";
 
 export default function SideBar() {
   const [isLogin, setIslogin] = useRecoilState(loginState);
@@ -24,7 +25,7 @@ export default function SideBar() {
       const request = await deleteLogout();
       if (request) {
         // 정상적으로 제거 되면
-        sessionStorage.removeItem("accessToken");
+        // Cookies.remove("RT");
       }
     } catch (error) {
       console.error(error);

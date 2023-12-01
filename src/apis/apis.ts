@@ -88,7 +88,7 @@ export async function deleteLogout(): Promise<boolean> {
       .delete(url)
       // common-test accessToken masking 2023.11.29
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.data.status === 200) {
           return true;
         } else {
