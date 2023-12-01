@@ -99,6 +99,9 @@ export async function deleteLogout(): Promise<boolean> {
   );
 }
 
-export function getFriendList(data: any, url: string) {}
+export async function getFriendList() {
+  const url = `${process.env.REACT_APP_BASE_URL}api/friends`;
+  return tokenRefresher.get(url);
+}
 
 export function getChatList(data: any, url: string) {}

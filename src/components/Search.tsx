@@ -106,22 +106,22 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
           ) : (
             list &&
             list
-              .filter((friend) => friend.name.includes(findList))
-              .map((friend) => (
+              .filter((friend) => friend.memberNickname.includes(findList))
+              .map((friend, index) => (
                 <div
                   onClick={() => {
-                    nav(`user/${friend.userId}`);
+                    nav(`user/${friend.memberNickname}`);
                   }}
-                  key={friend.userId}
+                  key={index}
                   className="hover:bg-slate-50 cursor-pointer w-full flex flex-row justify-start items-center gap-12 py-2 border-b-2 last:border-none border-dashed"
                 >
                   <div
                     style={{
-                      backgroundImage: `${friend.image}`,
+                      backgroundImage: `${friend.imageName}`,
                     }}
                     className="w-16 h-16 rounded-3xl bg-purple-200"
                   />
-                  <h3>{friend.name}</h3>
+                  <h3>{friend.memberNickname}</h3>
                 </div>
               ))
               .slice(0, 5)

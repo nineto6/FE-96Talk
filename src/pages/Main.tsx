@@ -5,33 +5,44 @@ import FriendList from "../components/FriendList";
 import { useRecoilState } from "recoil";
 import { loginState } from "../utils/atoms";
 import TopBar from "../components/TopBar";
-import { friends } from "../jsons/dummy";
+// import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
 import Search from "../components/Search";
 import Hood from "../components/Hood";
 import Add from "../components/Add";
 import axios from "axios";
+import { getFriendList } from "../apis/apis";
+import Loading from "../components/Loading";
 
 axios.defaults.withCredentials = true;
 // Cookie 를 사용하기 위함
 
 export interface IFriendProps {
-  name: string;
-  quote?: string | null;
-  music: string;
-  image: string;
-  userId: number;
+  memberNickname: string;
+  profileStateMessage: string | null;
+  imageName: string | null;
+  music?: string;
+  type: string | null;
 }
 
 export default function Main() {
   const [isSearch, setIsSearch] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
+  const [isList, setIsList] = useState<IFriendProps[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    let isToken = sessionStorage.getItem("accessToken");
-    if (isToken) {
-      const url = "http://nineto6.kro.kr:8080/api/friends";
-    }
+    const getList = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getFriendList();
+        setIsList(response.data.result);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getList();
   }, []);
 
   const onToggleSearch = () => {
@@ -44,10 +55,11 @@ export default function Main() {
 
   return (
     <div className="flex flex-row">
+      {isLoading && <Loading />}
       <Hood title="친구 목록" />
       {/* Container */}
       {isSearch && (
-        <Search title={"친구"} onToggleSearch={onToggleSearch} list={friends} />
+        <Search title={"친구"} onToggleSearch={onToggleSearch} list={isList} />
       )}
       {isAdd && <Add title="아이디로 친구 추가" onToggleAdd={onToggleAdd} />}
       <SideBar />
@@ -105,14 +117,13 @@ export default function Main() {
           </div>
         </div>
         <div className="mx-4">
-          {friends.map((friend) => (
+          {isList.map((friend, index) => (
             <FriendList
-              key={friend.userId}
-              name={friend.name}
-              quote={friend.quote}
-              music={friend.music}
-              image={friend.image}
-              userId={friend.userId}
+              key={index}
+              memberNickname={friend.memberNickname}
+              profileStateMessage={friend.profileStateMessage}
+              imageName={friend.imageName}
+              type={friend.type}
             />
           ))}
         </div>
