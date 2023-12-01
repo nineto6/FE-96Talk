@@ -30,13 +30,15 @@ export default function Main() {
   const [isAdd, setIsAdd] = useState(false);
   const [isList, setIsList] = useState<IFriendProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCount, setIsCount] = useState(0);
 
   useEffect(() => {
     const getList = async () => {
       try {
         setIsLoading(true);
         const response = await getFriendList();
-        setIsList(response.data.result);
+        setIsList(response.data.result.friendProfileList);
+        setIsCount(response.data.result.friendProfileSize);
       } finally {
         setIsLoading(false);
       }
@@ -112,7 +114,7 @@ export default function Main() {
           <div className="absolute px-4 mt-3 w-full border-t border-slate-300" />
           <div className="relative -top-0 text-center">
             <span className="bg-white px-2 text-sm text-slate-500">
-              친구 {443}
+              친구 {isCount}
             </span>
           </div>
         </div>
