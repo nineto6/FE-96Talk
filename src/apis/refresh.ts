@@ -40,7 +40,7 @@ tokenRefresher.interceptors.response.use(
     // 요청 실패한 configuration 저장
     // console.log(error);
     // error.response.status (FUNCTION CHANGE)
-    if (error.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
