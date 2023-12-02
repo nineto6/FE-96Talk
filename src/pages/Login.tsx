@@ -5,10 +5,10 @@ import { error } from "console";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import { useRecoilState } from "recoil";
-import { loginState } from "../utils/atoms";
 import axios from "axios";
 import Hood from "../components/Hood";
 import { postLogin } from "../apis/apis";
+import Cookies from "js-cookie";
 
 export interface ILoginProps {
   memberEmail: string;
@@ -17,7 +17,6 @@ export interface ILoginProps {
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isLogin, setIsLogin] = useRecoilState(loginState);
 
   const nav = useNavigate();
   const {
@@ -37,7 +36,10 @@ export default function Login() {
         console.log("Login Success");
       }
     } catch (error) {
-      console.error("Login Failed", error);
+      // console.error("Login Failed", error);
+      if (error instanceof Error) {
+        console.log(error);
+      }
     } finally {
       setIsLoading(false);
     }

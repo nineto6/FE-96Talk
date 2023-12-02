@@ -3,7 +3,6 @@ import SideBar from "../components/SideBar";
 import { useNavigate } from "react-router-dom";
 import FriendList from "../components/FriendList";
 import { useRecoilState } from "recoil";
-import { loginState } from "../utils/atoms";
 import TopBar from "../components/TopBar";
 // import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
@@ -39,6 +38,8 @@ export default function Main() {
         const response = await getFriendList();
         setIsList(response.data.result.friendProfileList);
         setIsCount(response.data.result.friendProfileSize);
+      } catch (error) {
+        console.error(error);
       } finally {
         setIsLoading(false);
       }

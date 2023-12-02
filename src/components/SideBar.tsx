@@ -1,5 +1,4 @@
 import { useRecoilState } from "recoil";
-import { loginState } from "../utils/atoms";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,7 +7,6 @@ import Loading from "./Loading";
 import Cookies from "js-cookie";
 
 export default function SideBar() {
-  const [isLogin, setIslogin] = useRecoilState(loginState);
   const [isLoading, setIsLoading] = useState(false);
 
   const nav = useNavigate();
@@ -28,7 +26,10 @@ export default function SideBar() {
         // Cookies.remove("RT");
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     } finally {
       setIsLoading(false);
       nav("/login");

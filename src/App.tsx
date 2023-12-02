@@ -6,7 +6,6 @@ import Chats from "./pages/Chats";
 import Profile from "./pages/Profile";
 import Chat from "./pages/Chat";
 import { useRecoilState } from "recoil";
-import { loginState } from "./utils/atoms";
 import Signup from "./pages/Signup";
 import User from "./pages/User";
 
