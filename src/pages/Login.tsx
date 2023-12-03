@@ -53,7 +53,7 @@ export default function Login() {
       {isLoading && <Loading />}
       <TopBar isDark={true} />
       {/* Main */}
-      <div className="flex flex-col justify-start items-center">
+      <div className="flex flex-col justify-start mt-12 items-center">
         {/* Logo */}
         <img
           src="/images/96TALK-Logo-Original.png"
