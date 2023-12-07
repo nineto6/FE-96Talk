@@ -1,4 +1,5 @@
 // import axios from "axios";
+import { IAddDataProps } from "../components/Add";
 import { ILoginProps } from "../pages/Login";
 import { ISignupProps } from "../pages/Signup";
 import tokenRefresher from "./refresh";
@@ -104,3 +105,11 @@ export async function getFriendList() {
 }
 
 export function getChatList(data: any, url: string) {}
+
+export function getSearchProfileList(data: IAddDataProps) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/profiles/search`;
+
+  return tokenRefresher.get(url, {
+    params: data,
+  });
+}

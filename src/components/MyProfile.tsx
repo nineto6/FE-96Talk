@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getProfileData, getProfileImage } from "../apis/apis";
 import Loading from "./Loading";
 
-interface IMyProfileProps {
+export interface IMyProfileProps {
   memberNickname: string;
   imageFile: string | null;
   profileStateMessage: string;
