@@ -113,3 +113,11 @@ export function getSearchProfileList(data: IAddDataProps) {
     params: data,
   });
 }
+
+export function postAddFriend(friendNickname: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/friends`;
+
+  return tokenRefresher.post(url, {
+    friendNickname,
+  });
+}

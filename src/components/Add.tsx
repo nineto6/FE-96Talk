@@ -4,8 +4,9 @@ import { IFriendProps } from "../pages/Main";
 import { useNavigate } from "react-router-dom";
 import { ring } from "ldrs";
 import axios from "axios";
-import { getSearchProfileList } from "../apis/apis";
+import { getSearchProfileList, postAddFriend } from "../apis/apis";
 import { IMyProfileProps } from "./MyProfile";
+import SearchProfile from "./SearchProfile";
 
 ring.register();
 
@@ -21,8 +22,18 @@ interface IAddProps {
   onToggleAdd: Function;
 }
 
+interface IPaginationProps {
+  endPage: number;
+  existNextPage: boolean;
+  existPrevPage: boolean;
+  limitStart: number;
+  startPage: number;
+  totalPageCount: number;
+  totalRecordCount: number;
+}
+
 export default function Add({ title, onToggleAdd }: IAddProps) {
-  const [findList, setFindList] = useState<IMyProfileProps[]>([]);
+  const [findList, setFindList] = useState<IFriendProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDataSet, setIsDataSet] = useState<IAddDataProps>({
     keyword: "",
@@ -31,71 +42,59 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
     pageSize: 5,
   });
   // form 값 임시 저장소
-
   const [canMove, setCanMove] = useState({
     prev: false,
     next: false,
   });
-
+  const [isPagination, setIsPagination] = useState<IPaginationProps>();
+  const [pageTab, isPageTab] = useState<number[]>([1, 2, 3, 4, 5]);
   const nav = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
-    setValue,
   } = useForm<IAddDataProps>();
 
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setIsVisible(true);
-      }
-    });
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
-  }, []);
-
-  const onAddFriend = () => {
-    const url = "http://localhost:8080/";
+  const onAddFriend = async (targetName: string) => {
     try {
-      setIsLoading(true);
-      axios.get(url, {
-        headers: {
-          Authorization: "",
-        },
-      });
-    } finally {
-      setIsLoading(false);
+      const response = await postAddFriend(targetName);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   const onValid = async () => {
-    console.log(isDataSet);
-    try {
-      const response = await getSearchProfileList(isDataSet);
-      console.log(response);
+    setFindList([]);
+    // 리스트를 비워줌
+    // console.log(isDataSet);
+    if (isDataSet.keyword !== "") {
+      try {
+        const response = await getSearchProfileList(isDataSet);
+        // console.log(response);
 
-      if (response.data.status === 200) {
-        console.log(response.data.result);
-        const { list, pagination } = response.data.result;
-        setFindList(list);
+        if (response.data.status === 200) {
+          console.log(response.data.result);
+          const { list, pagination } = response.data.result;
+          setFindList(list);
+          if (pagination) {
+            setIsPagination(pagination);
+            setCanMove((current) => {
+              return {
+                ...current,
+                next: pagination.existNextPage,
+                prev: pagination.existPrevPage,
+              };
+            });
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
     }
   };
 
@@ -143,6 +142,28 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
       };
     });
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setIsVisible(true);
+      }
+    });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    onValid();
+  }, [isDataSet]);
 
   return (
     <div className="bg-slate-500 bg-opacity-25 h-full w-full z-50 fixed flex flex-col justify-center items-center">
@@ -201,77 +222,61 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
           <div className="w-full mt-12 flex flex-col gap-2">
             {findList &&
               findList.map((target, index) => (
-                <div
+                <SearchProfile
                   key={index}
-                  className=" hover:bg-slate-50 cursor-pointer w-full flex flex-row justify-between items-center gap-12 py-2 border-b-2 last:border-none border-dashed"
-                >
-                  <div className="flex flex-row justify-start gap-12 items-center">
-                    <div
-                      style={{
-                        backgroundImage: `SET`,
-                      }}
-                      className="w-16 h-16 rounded-3xl bg-purple-200"
-                    />
-                    <h3>{target.memberNickname}</h3>
-                  </div>
-                  <div>
-                    {/* Button Box */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-6 h-6 hover:text-violet-400 text-slate-600"
-                      onClick={onAddFriend}
-                    >
-                      <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
-                    </svg>
-                  </div>
-                </div>
+                  memberNickname={target.memberNickname}
+                  imageName={target.imageName}
+                  onAddFriend={() => {
+                    onAddFriend(target.memberNickname);
+                  }}
+                  type={target.type}
+                />
               ))}
 
-            <div className="w-full flex flex-row gap-6 justify-center items-center mt-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className={`w-6 h-6 ${
-                  canMove.prev === false ? "opacity-25" : "cursor-pointer"
-                }`}
-                onClick={onChangePage}
-                id="nextButton"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
-              <h4 onClick={onGetPage}>1</h4>
-              <h4 onClick={onGetPage}>2</h4>
-              <h4 onClick={onGetPage}>3</h4>
-              <h4 onClick={onGetPage}>4</h4>
-              <h4 onClick={onGetPage}>5</h4>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className={`w-6 h-6 ${
-                  canMove.next === false ? "opacity-25" : "cursor-pointer"
-                }`}
-                onClick={onChangePage}
-                id="nextButton"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                />
-              </svg>
-            </div>
+            {findList.length !== 0 && (
+              <div className="w-full flex flex-row gap-6 justify-center items-center mt-5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className={`w-6 h-6 ${
+                    canMove.prev === false ? "opacity-25" : "cursor-pointer"
+                  }`}
+                  onClick={onChangePage}
+                  id="nextButton"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  />
+                </svg>
+                {isPagination &&
+                  pageTab
+                    .filter((page) => page <= isPagination.endPage)
+                    .map((page) => <h4 onClick={onGetPage}>{page}</h4>)}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className={`w-6 h-6 ${
+                    canMove.next === false ? "opacity-25" : "cursor-pointer"
+                  }`}
+                  onClick={onChangePage}
+                  id="nextButton"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </div>
+            )}
           </div>
         )}
       </div>
