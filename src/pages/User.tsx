@@ -30,7 +30,6 @@ export default function User() {
   });
 
   const [isFriend, setIsFriend] = useState<boolean>(false);
-
   const { userNumber } = useParams();
   const nav = useNavigate();
 

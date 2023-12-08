@@ -65,10 +65,10 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
   const onAddFriend = async (targetName: string) => {
     try {
       const response = await postAddFriend(targetName);
-      window.location.reload();
     } catch (error) {
       console.error(error);
     } finally {
+      window.location.reload();
     }
   };
 

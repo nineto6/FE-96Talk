@@ -1,8 +1,15 @@
+import { useNavigate } from "react-router-dom";
+
 interface ITopBarProps {
   isDark?: boolean;
 }
 
 export default function TopBar({ isDark }: ITopBarProps) {
+  const nav = useNavigate();
+  const onBack = () => {
+    nav(-1);
+  };
+
   return (
     <div
       className={`bg-transparent h-5 flex flex-row justify-end items-center gap-2 px-2 ${
@@ -41,6 +48,7 @@ export default function TopBar({ isDark }: ITopBarProps) {
         strokeWidth="1.5"
         stroke="currentColor"
         className="w-4 h-4 cursor-pointer"
+        onClick={onBack}
       >
         <path
           strokeLinecap="round"
