@@ -4,9 +4,11 @@ import Hood from "../components/Hood";
 import TopBar from "../components/TopBar";
 import { useEffect, useState } from "react";
 import {
+  deleteFriend,
   getFriendList,
   getProfileImage,
   getUserProfileData,
+  postAddFriend,
 } from "../apis/apis";
 import Loading from "../components/Loading";
 
@@ -36,12 +38,38 @@ export default function User() {
     nav(`/chats/${userNumber}`);
   };
 
-  const onAdd = () => {
-    nav("/");
+  const onAdd = async () => {
     // ADD FRIEND LOGIC 추후 추가
+    try {
+      setIsLoading(true);
+      if (userNumber) {
+        const response = await postAddFriend(userNumber);
+        console.log("Add friend");
+      }
+    } catch (error) {
+      console.log("Cannot add friend");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+      window.location.reload();
+    }
   };
 
-  const onDelete = () => {};
+  const onDelete = async () => {
+    try {
+      setIsLoading(true);
+      if (userNumber) {
+        const response = await deleteFriend(userNumber);
+        console.log("Delete friend");
+      }
+    } catch (error) {
+      console.log("Cannot delete friend");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+      window.location.reload();
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -88,7 +116,10 @@ export default function User() {
                   }
                 });
               });
-            } catch (error) {}
+            } catch (error) {
+              console.log("Cannot connected.");
+              console.error(error);
+            }
             // console.log(friendList.data.result.friendProfileList);
           }
         } catch (error) {

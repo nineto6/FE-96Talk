@@ -278,7 +278,11 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
                 {isPagination &&
                   pageTab
                     .filter((page) => page <= isPagination.endPage)
-                    .map((page) => <h4 onClick={onGetPage}>{page}</h4>)}
+                    .map((page, index) => (
+                      <h4 key={index} onClick={onGetPage}>
+                        {page}
+                      </h4>
+                    ))}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

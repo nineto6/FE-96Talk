@@ -130,3 +130,13 @@ export function getUserProfileData(memberNickname: string) {
 
   return tokenRefresher.get(url);
 }
+
+export function deleteFriend(friendNickname: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/friends`;
+
+  return tokenRefresher.delete(url, {
+    data: {
+      friendNickname,
+    },
+  });
+}
