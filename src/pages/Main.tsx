@@ -64,7 +64,13 @@ export default function Main() {
       {isSearch && (
         <Search title={"친구"} onToggleSearch={onToggleSearch} list={isList} />
       )}
-      {isAdd && <Add title="아이디로 친구 추가" onToggleAdd={onToggleAdd} />}
+      {isAdd && (
+        <Add
+          title="아이디로 친구 추가"
+          onToggleAdd={onToggleAdd}
+          list={isList}
+        />
+      )}
       <SideBar />
       <div className="ml-16 h-full flex w-full flex-col justify-start">
         <TopBar />

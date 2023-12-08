@@ -20,6 +20,7 @@ export interface IAddDataProps {
 interface IAddProps {
   title: string;
   onToggleAdd: Function;
+  list: IFriendProps[];
 }
 
 interface IPaginationProps {
@@ -32,7 +33,7 @@ interface IPaginationProps {
   totalRecordCount: number;
 }
 
-export default function Add({ title, onToggleAdd }: IAddProps) {
+export default function Add({ title, onToggleAdd, list }: IAddProps) {
   const [findList, setFindList] = useState<IFriendProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDataSet, setIsDataSet] = useState<IAddDataProps>({
@@ -46,14 +47,16 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
     prev: false,
     next: false,
   });
+  const [isKeyword, setIsKeyword] = useState<string>("");
   const [isPagination, setIsPagination] = useState<IPaginationProps>();
-  const [pageTab, isPageTab] = useState<number[]>([1, 2, 3, 4, 5]);
+  const [pageTab, setPageTab] = useState<number[]>([1, 2, 3, 4, 5]);
   const nav = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<IAddDataProps>();
 
   const [isVisible, setIsVisible] = useState(false);
@@ -62,8 +65,10 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
   const onAddFriend = async (targetName: string) => {
     try {
       const response = await postAddFriend(targetName);
+      window.location.reload();
     } catch (error) {
       console.error(error);
+    } finally {
     }
   };
 
@@ -71,7 +76,9 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
     setFindList([]);
     // 리스트를 비워줌
     // console.log(isDataSet);
+
     if (isDataSet.keyword !== "") {
+      setIsLoading(true);
       try {
         const response = await getSearchProfileList(isDataSet);
         // console.log(response);
@@ -94,6 +101,7 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
       } catch (error) {
         console.error(error);
       } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -120,6 +128,10 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
           page: isDataSet.pageSize + isDataSet.page,
         };
       });
+
+      setPageTab(() => {
+        return pageTab.map((tab) => (tab += isDataSet.pageSize));
+      });
     }
 
     if (order === "prevPage") {
@@ -128,6 +140,10 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
           ...current,
           page: isDataSet.page - isDataSet.pageSize,
         };
+      });
+
+      setPageTab(() => {
+        return pageTab.map((tab) => (tab -= isDataSet.pageSize));
       });
     }
   };
@@ -221,17 +237,23 @@ export default function Add({ title, onToggleAdd }: IAddProps) {
         ) : (
           <div className="w-full mt-12 flex flex-col gap-2">
             {findList &&
-              findList.map((target, index) => (
-                <SearchProfile
-                  key={index}
-                  memberNickname={target.memberNickname}
-                  imageName={target.imageName}
-                  onAddFriend={() => {
-                    onAddFriend(target.memberNickname);
-                  }}
-                  type={target.type}
-                />
-              ))}
+              findList.map((target, index) => {
+                const canAdd = list.some(
+                  (item) => item.memberNickname === target.memberNickname
+                );
+                return (
+                  <SearchProfile
+                    key={index}
+                    memberNickname={target.memberNickname}
+                    imageName={target.imageName}
+                    onAddFriend={() => {
+                      onAddFriend(target.memberNickname);
+                    }}
+                    type={target.type}
+                    canAdd={canAdd}
+                  />
+                );
+              })}
 
             {findList.length !== 0 && (
               <div className="w-full flex flex-row gap-6 justify-center items-center mt-5">
