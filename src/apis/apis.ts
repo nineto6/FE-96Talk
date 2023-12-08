@@ -23,8 +23,12 @@ export async function postLogin(data: ILoginProps): Promise<boolean> {
       }
     })
     .catch((error) => {
-      if (!error.message) {
+      if (!error.response) {
+        console.error("Server Disconnected");
         throw new Error("Server Disconnected");
+      } else {
+        // 에러 발생시 아이디가 틀렸다던가 존재하지 않는 아이디라던가... CONTROL
+        console.error("Server Error:", error.response.status);
       }
       throw error;
     });

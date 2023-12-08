@@ -79,7 +79,7 @@ export default function Login() {
               name="memberPwd"
               className="h-10 px-4"
               placeholder="비밀번호"
-              type="password"
+              type="current-password"
             />
             <button className="bg-themeDarkPurple text-white h-10">
               로 그 인
