@@ -104,7 +104,10 @@ export async function getFriendList() {
   return tokenRefresher.get(url);
 }
 
-export function getChatList(data: any, url: string) {}
+export function getChatList() {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom`;
+  return tokenRefresher.get(url);
+}
 
 export function getSearchProfileList(data: IAddDataProps) {
   const url = `${process.env.REACT_APP_BASE_URL}api/profiles/search`;
@@ -120,4 +123,10 @@ export function postAddFriend(friendNickname: string) {
   return tokenRefresher.post(url, {
     friendNickname,
   });
+}
+
+export function getUserProfileData(memberNickname: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/profiles/${memberNickname}`;
+
+  return tokenRefresher.get(url);
 }

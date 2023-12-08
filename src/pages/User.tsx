@@ -2,8 +2,27 @@ import { useNavigate, useParams } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import Hood from "../components/Hood";
 import TopBar from "../components/TopBar";
+import { useEffect, useState } from "react";
+import { getProfileImage, getUserProfileData } from "../apis/apis";
+import Loading from "../components/Loading";
+
+interface IUserProps {
+  memberNickname: string;
+  imageName: string | null;
+  profileStateMessage: string;
+  type: string | null;
+}
 
 export default function User() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isImage, setIsImage] = useState<string>("");
+  const [isData, setIsData] = useState<IUserProps>({
+    memberNickname: "",
+    imageName: null,
+    profileStateMessage: "",
+    type: null,
+  });
+
   const { userNumber } = useParams();
   const nav = useNavigate();
 
@@ -16,9 +35,57 @@ export default function User() {
     // ADD FRIEND LOGIC 추후 추가
   };
 
+  useEffect(() => {
+    const getData = async () => {
+      if (userNumber) {
+        try {
+          setIsLoading(true);
+          const response = await getUserProfileData(userNumber);
+          console.log(response);
+          if (response?.data?.status === 200) {
+            const { imageName, memberNickname, profileStateMessage, type } =
+              response.data.result;
+
+            setIsData(() => {
+              return {
+                imageName,
+                memberNickname,
+                profileStateMessage,
+                type,
+              };
+            });
+
+            if (imageName && type) {
+              try {
+                setIsLoading(true);
+                const imageResponse = await getProfileImage(imageName, type);
+                const reader = new FileReader();
+                reader.readAsDataURL(imageResponse.data);
+                reader.onloadend = () => {
+                  const base64data = reader.result as string;
+                  setIsImage(base64data);
+                };
+              } finally {
+                setIsLoading(false);
+              }
+            }
+          }
+        } catch (error) {
+          console.log("Unregistered user.");
+          console.error(error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    getData();
+  }, [userNumber]);
+
   return (
     <div className="flex justify-center items-center bg-violet-200">
-      <Hood title={` 님의 프로필`} />
+      {isLoading && <Loading />}
+      <Hood title={`${isData.memberNickname}님의 프로필`} />
       <div className="bg-white flex flex-col justify-start h-screen">
         <TopBar />
 
@@ -33,6 +100,7 @@ export default function User() {
                   <span
                     className="w-32 h-32 bg-violet-400 rounded-full relative"
                     style={{
+                      backgroundImage: `url(${isImage})`,
                       backgroundSize: "cover", // 이미지를 span 크기에 맞게 조절
                       backgroundPosition: "center", // 이미지를 중앙에 위치시킴
                     }}
@@ -42,12 +110,12 @@ export default function User() {
                 </div>
                 <div className="border-b-2 relative">
                   <div className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800">
-                    <h3>이준모</h3>
+                    <h3>{isData.memberNickname}</h3>
                   </div>
                 </div>
                 <div className="border-b-2 relative">
                   <div className="px-8 h-8 bg-transparent text-center w-full focus:outline-none text-slate-800">
-                    <h3>안녕</h3>
+                    <h3>{isData.profileStateMessage}</h3>
                   </div>
                 </div>
                 {/* <input className="h-8 border-b-2 bg-transparent" /> */}
