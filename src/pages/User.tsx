@@ -3,7 +3,11 @@ import SideBar from "../components/SideBar";
 import Hood from "../components/Hood";
 import TopBar from "../components/TopBar";
 import { useEffect, useState } from "react";
-import { getProfileImage, getUserProfileData } from "../apis/apis";
+import {
+  getFriendList,
+  getProfileImage,
+  getUserProfileData,
+} from "../apis/apis";
 import Loading from "../components/Loading";
 
 interface IUserProps {
@@ -23,6 +27,8 @@ export default function User() {
     type: null,
   });
 
+  const [isFriend, setIsFriend] = useState<boolean>(false);
+
   const { userNumber } = useParams();
   const nav = useNavigate();
 
@@ -34,6 +40,8 @@ export default function User() {
     nav("/");
     // ADD FRIEND LOGIC 추후 추가
   };
+
+  const onDelete = () => {};
 
   useEffect(() => {
     const getData = async () => {
@@ -65,10 +73,23 @@ export default function User() {
                   const base64data = reader.result as string;
                   setIsImage(base64data);
                 };
-              } finally {
-                setIsLoading(false);
+              } catch (error) {
+                console.log("Not exist image.");
+                console.error(error);
               }
             }
+
+            try {
+              await getFriendList().then((response) => {
+                const list = response.data.result.friendProfileList;
+                list.forEach((friend: IUserProps) => {
+                  if (friend.memberNickname === userNumber) {
+                    setIsFriend(true);
+                  }
+                });
+              });
+            } catch (error) {}
+            // console.log(friendList.data.result.friendProfileList);
           }
         } catch (error) {
           console.log("Unregistered user.");
@@ -139,21 +160,39 @@ export default function User() {
                     <h3 className="text-slate-700">채팅 하기</h3>
                   </div>
 
-                  <div
-                    onClick={onAdd}
-                    className="gap-2 transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-6 h-6"
+                  {isFriend ? (
+                    <div
+                      onClick={onDelete}
+                      className="gap-2 transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl"
                     >
-                      <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
-                    </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path d="M10.375 2.25a4.125 4.125 0 100 8.25 4.125 4.125 0 000-8.25zM10.375 12a7.125 7.125 0 00-7.124 7.247.75.75 0 00.363.63 13.067 13.067 0 006.761 1.873c2.472 0 4.786-.684 6.76-1.873a.75.75 0 00.364-.63l.001-.12v-.002A7.125 7.125 0 0010.375 12zM16 9.75a.75.75 0 000 1.5h6a.75.75 0 000-1.5h-6z" />
+                      </svg>
 
-                    <h3 className="text-slate-700">친구 추가</h3>
-                  </div>
+                      <h3 className="text-slate-700">친구 삭제</h3>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={onAdd}
+                      className="gap-2 transition-colors flex flex-col justify-between items-center cursor-pointer p-2 hover:bg-slate-100 rounded-xl"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
+                      </svg>
+
+                      <h3 className="text-slate-700">친구 추가</h3>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
