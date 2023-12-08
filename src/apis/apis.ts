@@ -140,3 +140,11 @@ export function deleteFriend(friendNickname: string) {
     },
   });
 }
+
+export function postCreateChatroom(friendNickname: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom`;
+
+  return tokenRefresher.post(url, {
+    friendNickname,
+  });
+}

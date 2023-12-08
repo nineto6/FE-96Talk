@@ -65,9 +65,12 @@ export default function Profile() {
   };
 
   const onCancel = () => {
-    reset();
-    setIsModify((current) => !current);
-    setImagePreview("");
+    try {
+      setIsLoading(true);
+      window.location.reload();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onValid = async (data: IProfileProps) => {
