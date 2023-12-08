@@ -1,10 +1,41 @@
+import { useEffect, useState } from "react";
 import ChatList from "../components/ChatList";
 import Hood from "../components/Hood";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
 import { chatList } from "../jsons/dummy";
+import { getChatList } from "../apis/apis";
+import { IUserProps } from "./User";
+
+export interface IChatListProps {
+  chatroomChannelId: string;
+  profileResponseList: IUserProps[];
+  recentMessage: string | null;
+}
 
 export default function Chats() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isList, setIsList] = useState<IChatListProps[]>([]);
+
+  useEffect(() => {
+    const getList = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getChatList();
+        if (response.status === 200 && response.data?.status === 200) {
+          console.log(response.data.result);
+          setIsList(response.data.result);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getList();
+  }, []);
+
   return (
     <div className="flex flex-row">
       <Hood title="채팅 목록" />
@@ -52,13 +83,12 @@ export default function Chats() {
           </div>
         </div>
         <div className="mx-4">
-          {chatList.map((room) => (
+          {isList.map((room) => (
             <ChatList
-              key={room.roomId}
-              name={room.name}
-              currentMessage={room.currentMessage}
-              date={room.date}
-              roomId={room.roomId}
+              key={room.chatroomChannelId}
+              recentMessage={room.recentMessage}
+              chatroomChannelId={room.chatroomChannelId}
+              profileResponseList={room.profileResponseList}
             />
           ))}
         </div>
