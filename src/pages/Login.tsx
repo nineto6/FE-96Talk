@@ -9,6 +9,7 @@ import axios from "axios";
 import Hood from "../components/Hood";
 import { postLogin } from "../apis/apis";
 import Cookies from "js-cookie";
+import Messenger from "../components/Messenger";
 
 export interface ILoginProps {
   memberEmail: string;
@@ -17,6 +18,9 @@ export interface ILoginProps {
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isErrorText, setIsErrorText] = useState("");
+  // 에러 발생 여부
 
   const nav = useNavigate();
   const {
@@ -39,6 +43,8 @@ export default function Login() {
       // console.error("Login Failed", error);
       if (error instanceof Error) {
         console.log(error);
+        setIsError(true);
+        setIsErrorText(error.message);
       }
     } finally {
       setIsLoading(false);
@@ -51,6 +57,7 @@ export default function Login() {
     <div className="w-screen h-screen flex-col justify-start bg-themePurple">
       <Hood title="로그인" />
       {isLoading && <Loading />}
+      {isError && <Messenger text={isErrorText} setIsError={setIsError} />}
       <TopBar isDark={true} />
       {/* Main */}
       <div className="flex flex-col justify-start mt-12 items-center">
@@ -79,7 +86,7 @@ export default function Login() {
               name="memberPwd"
               className="h-10 px-4"
               placeholder="비밀번호"
-              type="current-password"
+              type="password"
             />
             <button className="bg-themeDarkPurple text-white h-10">
               로 그 인
