@@ -11,11 +11,14 @@ import SockJS from "sockjs-client";
 import { getProfileData } from "../apis/apis";
 
 interface IChatProps {
+  channelId: string;
   message: string;
-  speaker: boolean;
+  regdate: string;
+  writerNickname: string;
 }
 
 export default function Chat() {
+  const [isName, setIsName] = useState<string>("");
   const [isChat, setIsChat] = useState<IChatProps[]>([]);
   const { register, handleSubmit, reset } = useForm<{ message: string }>();
   const chatRef = useRef<HTMLDivElement | null>(null);
@@ -25,10 +28,7 @@ export default function Chat() {
   let client = useRef<CompatClient>();
 
   const onValid = (data: { message: string }) => {
-    // console.log(data.message);
-    // setIsChat([...isChat, { message: data.message, speaker: true }]);
     publish(data.message);
-
     reset();
   };
 
@@ -47,7 +47,10 @@ export default function Chat() {
       },
       () => {
         client.current?.subscribe(`/sub/chat/${chatroomChannelId}`, (body) => {
-          console.log(body);
+          console.log(JSON.parse(body.body));
+          setIsChat((current) => {
+            return [...current, JSON.parse(body.body)];
+          });
         });
       },
       () => {
@@ -69,7 +72,7 @@ export default function Chat() {
       body: JSON.stringify({
         channelId: chatroomChannelId,
         message: chat,
-        writerNickname: "",
+        writerNickname: isName,
       }),
     });
   };
@@ -78,6 +81,8 @@ export default function Chat() {
     const connection = async () => {
       await getProfileData().then((response) => {
         if (response.status === 200 && response.data?.status === 200) {
+          // console.log(response);
+          setIsName(response.data.result.memberNickname);
           connectHandler();
         }
       });
@@ -86,7 +91,7 @@ export default function Chat() {
     connection();
 
     chatRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [isChat]);
+  }, []);
 
   return (
     <div className="min-h-screen flex w-full flex-col justify-start">
@@ -97,14 +102,18 @@ export default function Chat() {
           <div className="flex flex-row justify-between w-auto gap-4">
             <div className="h-16 w-16 bg-violet-200 rounded-3xl" />
             <div className="flex flex-col justify-around">
-              <b className="text-slate-700 text-md">이준모</b>
+              <b className="text-slate-700 text-md">{isName}</b>
             </div>
           </div>
         </div>
       </div>
       <div className="bg-violet-300  custom-max-h pt-20 pb-4">
         {isChat.map((bubble, index) => (
-          <Bubble key={index} text={bubble.message} speaker={bubble.speaker} />
+          <Bubble
+            key={index}
+            text={bubble.message}
+            speaker={bubble.writerNickname === isName ? true : false}
+          />
         ))}
       </div>
 
