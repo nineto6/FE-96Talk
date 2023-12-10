@@ -34,6 +34,7 @@ export default function Chat() {
 
   const connectHandler = async () => {
     const token = globalConfig.isToken;
+
     client.current = Stomp.over(() => {
       const sock = new SockJS(`https://nineto6.p-e.kr/api/ws`);
       return sock;
@@ -44,12 +45,16 @@ export default function Chat() {
         Authorization: `Bearer ${token}`,
       },
       () => {
-        client.current?.subscribe(`/sub/chat/${chatroomChannelId}`, (body) => {
-          console.log(JSON.parse(body.body));
-          setIsChat((current) => {
-            return [...current, JSON.parse(body.body)];
-          });
-        });
+        client.current?.subscribe(
+          `/sub/chat/${chatroomChannelId}`,
+          (body) => {
+            // console.log(JSON.parse(body.body));
+            setIsChat((current) => {
+              return [...current, JSON.parse(body.body)];
+            });
+          },
+          { Authorization: `Bearer ${token}` }
+        );
       },
       () => {
         // error 로직
@@ -65,7 +70,12 @@ export default function Chat() {
   };
 
   const publish = (chat: string) => {
+    const token = globalConfig.isToken;
+
     client.current?.publish({
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       destination: "/pub/chat",
       body: JSON.stringify({
         channelId: chatroomChannelId,
@@ -112,6 +122,7 @@ export default function Chat() {
           <Bubble
             key={index}
             text={bubble.message}
+            time={bubble.regdate}
             speaker={bubble.writerNickname === isName ? true : false}
           />
         ))}
