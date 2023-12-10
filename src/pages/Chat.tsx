@@ -1,10 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import Bubble from "../components/Bubble";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import { BubbleList } from "../jsons/dummy";
 import Hood from "../components/Hood";
+import { Client, CompatClient, Stomp } from "@stomp/stompjs";
+import { globalConfig } from "../utils/globals";
+import SockJS from "sockjs-client";
+import { getProfileData } from "../apis/apis";
 
 interface IChatProps {
   message: string;
@@ -12,20 +16,77 @@ interface IChatProps {
 }
 
 export default function Chat() {
-  const [isChat, setIsChat] = useState<IChatProps[]>(BubbleList);
-  const { roomId } = useParams();
+  const [isChat, setIsChat] = useState<IChatProps[]>([]);
   const { register, handleSubmit, reset } = useForm<{ message: string }>();
   const chatRef = useRef<HTMLDivElement | null>(null);
+  const { chatroomChannelId } = useParams();
+  const nav = useNavigate();
 
-  useEffect(() => {
-    chatRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [isChat]);
+  let client = useRef<CompatClient>();
 
   const onValid = (data: { message: string }) => {
-    console.log(data.message);
-    setIsChat([...isChat, { message: data.message, speaker: true }]);
+    // console.log(data.message);
+    // setIsChat([...isChat, { message: data.message, speaker: true }]);
+    publish(data.message);
+
     reset();
   };
+
+  const connectHandler = async () => {
+    const token = globalConfig.isToken;
+    client.current = Stomp.over(() => {
+      const sock = new SockJS(`https://nineto6.p-e.kr/api/ws`);
+      return sock;
+    });
+
+    // console.log(token);
+
+    client.current.connect(
+      {
+        Authorization: `Bearer ${token}`,
+      },
+      () => {
+        client.current?.subscribe(`/sub/chat/${chatroomChannelId}`, (body) => {
+          console.log(body);
+        });
+      },
+      () => {
+        // error 로직
+        // alert("error");
+        nav("/");
+      }
+    );
+
+    client.current.onStompError = (frame) => {
+      console.log("Broker reported error: " + frame.headers["message"]);
+      console.log("Additional details: " + frame.body);
+    };
+  };
+
+  const publish = (chat: string) => {
+    client.current?.publish({
+      destination: "/pub/chat",
+      body: JSON.stringify({
+        channelId: chatroomChannelId,
+        message: chat,
+        writerNickname: "",
+      }),
+    });
+  };
+
+  useEffect(() => {
+    const connection = async () => {
+      await getProfileData().then((response) => {
+        if (response.status === 200 && response.data?.status === 200) {
+          connectHandler();
+        }
+      });
+    };
+
+    connection();
+
+    chatRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [isChat]);
 
   return (
     <div className="min-h-screen flex w-full flex-col justify-start">

@@ -17,7 +17,7 @@ export default function App() {
       <Route path={"/chats"} element={<Chats />} />
       <Route path={"/profile"} element={<Profile />} />
       <Route path={"/signup"} element={<Signup />} />
-      <Route path={"/chats/:roomId"} element={<Chat />} />
+      <Route path={"/chats/:chatroomChannelId"} element={<Chat />} />
       <Route path={"/user/:userNumber"} element={<User />} />
     </Routes>
   );

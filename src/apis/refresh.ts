@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { globalConfig } from "../utils/globals";
 
 ////////////////////////////////////////////////////
 //
@@ -37,6 +38,7 @@ tokenRefresher.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
+
     // 요청 실패한 configuration 저장
     // console.log(error);
     // error.response.status (FUNCTION CHANGE)
@@ -51,6 +53,8 @@ tokenRefresher.interceptors.response.use(
           "Authorization"
         ] = `Bearer ${newAccessToken}`;
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+        globalConfig.isToken = newAccessToken;
 
         console.log("Refresh Success");
 

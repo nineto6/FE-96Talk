@@ -5,6 +5,7 @@
   "homepage": "https://nineto6.p-e.kr",
   "proxy": "https://nineto6.p-e.kr",
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -25,6 +26,7 @@
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
+    "sockjs-client": "^1.6.1",
     "tailwindcss": "^3.3.5",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -56,6 +58,7 @@
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
     "@types/react-helmet": "^6.1.9",
+    "@types/sockjs-client": "^1.5.4",
     "autoprefixer": "^10.4.16",
     "postcss-nesting": "^12.0.1"
   }

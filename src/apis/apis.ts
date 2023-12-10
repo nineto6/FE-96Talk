@@ -2,6 +2,7 @@
 import { IAddDataProps } from "../components/Add";
 import { ILoginProps } from "../pages/Login";
 import { ISignupProps } from "../pages/Signup";
+import { globalConfig } from "../utils/globals";
 import tokenRefresher from "./refresh";
 
 export async function postLogin(data: ILoginProps): Promise<boolean> {
@@ -16,6 +17,9 @@ export async function postLogin(data: ILoginProps): Promise<boolean> {
         tokenRefresher.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
+
+        globalConfig.isToken = accessToken;
+
         return true;
       } else {
         // 400 - Bad Request
