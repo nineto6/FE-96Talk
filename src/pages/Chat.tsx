@@ -39,8 +39,6 @@ export default function Chat() {
       return sock;
     });
 
-    // console.log(token);
-
     client.current.connect(
       {
         Authorization: `Bearer ${token}`,
@@ -89,9 +87,11 @@ export default function Chat() {
     };
 
     connection();
-
-    chatRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
+
+  useEffect(() => {
+    chatRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [isChat]);
 
   return (
     <div className="min-h-screen flex w-full flex-col justify-start">
