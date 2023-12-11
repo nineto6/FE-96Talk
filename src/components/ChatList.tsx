@@ -2,14 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { IChatListProps } from "../pages/Chats";
 import { useEffect, useState } from "react";
 import { getProfileImage } from "../apis/apis";
+import dateFormatter from "../utils/formatter";
 
 export default function FriendList({
   chatroomChannelId,
   profileResponseList,
-  recentMessage,
+  recentChat,
 }: IChatListProps) {
   const nav = useNavigate();
   const [isImage, setIsImage] = useState<string>("");
+  const [isTime, setIsTime] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onMove = () => {
@@ -37,6 +39,7 @@ export default function FriendList({
       }
     };
 
+    dateFormatter(recentChat.regdate, setIsTime);
     getImage();
   }, []);
 
@@ -62,10 +65,10 @@ export default function FriendList({
               </b>
             ))}
           </div>
-          <p className="text-slate-500 text-sm">{recentMessage}</p>
+          <p className="text-slate-500 text-sm">{recentChat.message}</p>
         </div>
       </div>
-      <p className="py-1 px-4 text-slate-500 text-xs">{"123"}</p>
+      <p className="py-1 px-4 text-slate-500 text-xs">{isTime}</p>
     </div>
   );
 }

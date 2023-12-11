@@ -10,17 +10,21 @@ import { IUserProps } from "./User";
 export interface IChatListProps {
   chatroomChannelId: string;
   profileResponseList: IUserProps[];
-  recentMessage: string | null;
+  recentChat: IRecentProps;
+}
+
+export interface IRecentProps {
+  message: string;
+  regdate: string;
 }
 
 export default function Chats() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isList, setIsList] = useState<IChatListProps[]>([]);
 
   useEffect(() => {
     const getList = async () => {
       try {
-        setIsLoading(true);
         const response = await getChatList();
         if (response.status === 200 && response.data?.status === 200) {
           console.log(response.data.result);
@@ -86,7 +90,7 @@ export default function Chats() {
           {isList.map((room) => (
             <ChatList
               key={room.chatroomChannelId}
-              recentMessage={room.recentMessage}
+              recentChat={room.recentChat}
               chatroomChannelId={room.chatroomChannelId}
               profileResponseList={room.profileResponseList}
             />
