@@ -198,6 +198,7 @@ export default function Chat() {
             type="text"
             id="message"
             name="message"
+            className="w-full"
           />
         </form>
       </div>

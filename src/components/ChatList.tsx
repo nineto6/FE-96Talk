@@ -39,7 +39,9 @@ export default function FriendList({
       }
     };
 
-    dateFormatter(recentChat.regdate, setIsTime);
+    if (recentChat) {
+      dateFormatter(recentChat.regdate, setIsTime);
+    }
     getImage();
   }, []);
 
@@ -65,10 +67,10 @@ export default function FriendList({
               </b>
             ))}
           </div>
-          <p className="text-slate-500 text-sm">{recentChat.message}</p>
+          <p className="text-slate-500 text-sm">{recentChat?.message || ""}</p>
         </div>
       </div>
-      <p className="py-1 px-4 text-slate-500 text-xs">{isTime}</p>
+      <p className="py-1 px-4 text-slate-500 text-xs">{isTime || ""}</p>
     </div>
   );
 }

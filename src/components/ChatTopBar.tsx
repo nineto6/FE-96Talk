@@ -22,9 +22,6 @@ export default function ChatTopBar({
   };
 
   useEffect(() => {
-    // console.log(isPartner);
-    setIsLoading(true);
-
     const getImage = async () => {
       if (isPartner[0].imageName && isPartner[0].type) {
         try {
