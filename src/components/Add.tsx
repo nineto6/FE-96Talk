@@ -187,7 +187,7 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
         ref={ref}
         className={`${
           isVisible ? "animate-bounce-up " : ""
-        } rounded-md shadow-xl flex flex-col justify-center items-start w-2/3 h-auto p-8 bg-white opacity-none`}
+        } rounded-md shadow-xl flex flex-col justify-center items-start md:w-1/3 w-2/3 h-auto p-8 bg-white opacity-none`}
       >
         <div className="flex flex-row items-center w-full justify-end mb-4">
           <svg

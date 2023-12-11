@@ -9,6 +9,7 @@ interface IBubbleProps {
 
 export default function Bubble({ text, speaker, time }: IBubbleProps) {
   const [isTime, setIsTime] = useState<string>("");
+  const [current, setCurrent] = useState<string>("");
 
   const formatNumber = (number: number) => {
     return number < 10 ? `0${number}` : `${number}`;
@@ -34,8 +35,6 @@ export default function Bubble({ text, speaker, time }: IBubbleProps) {
         setIsTime(`오후 ${formatNumber(hour - 12)}:${formatNumber(min)}`);
       }
     }
-
-    console.log(currentTime.getMonth());
   }, []);
 
   return (
