@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { IUserProps } from "../pages/User";
 import { getProfileImage } from "../apis/apis";
+import { useNavigate } from "react-router-dom";
 
 interface IChatTopBarProps {
   isPartner: IUserProps[];
@@ -12,6 +13,13 @@ export default function ChatTopBar({
   setIsLoading,
 }: IChatTopBarProps) {
   const [isImage, setIsImage] = useState<string>("");
+  const nav = useNavigate();
+
+  const onMove = () => {
+    // 첫 멤버의 profile 로 이동.
+    // 현재 ver1 이므로 개인챗 밖에 안됨
+    nav(`/user/${isPartner[0].memberNickname}`);
+  };
 
   useEffect(() => {
     // console.log(isPartner);
@@ -40,14 +48,15 @@ export default function ChatTopBar({
   }, [isPartner]);
 
   return (
-    <div className="flex flex-row justify-between w-auto gap-4">
+    <div className="flex px-4 flex-row justify-start w-auto gap-4">
       <div
-        className="h-16 w-16 bg-violet-200 rounded-3xl"
+        className="h-16 w-16 bg-violet-200 rounded-3xl cursor-pointer"
         style={{
           backgroundImage: `url(${isImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
+        onClick={onMove}
       />
       <div className="flex flex-col justify-around">
         <b className="text-slate-700 text-md">

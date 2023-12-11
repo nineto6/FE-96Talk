@@ -146,11 +146,14 @@ export default function Chat() {
       />
       <div className="relative  z-20">
         {/* other-user */}
-        <div className="fixed w-full bg-violet-100 border-b transition-colors px-4 h-auto bg-transparent flex flex-row justify-between items-center gap-6 pt-2 pb-2 border-violet-50">
+
+        <div className="fixed w-full bg-violet-100 border-b transition-colors  h-auto bg-transparent flex flex-col justify-between items-stretch  pb-2 border-violet-50">
+          <TopBar />
+
           <ChatTopBar isPartner={isPartner} setIsLoading={setIsLoading} />
         </div>
       </div>
-      <div className="bg-violet-300  custom-max-h pt-20 pb-4">
+      <div className="bg-violet-300  custom-max-h pt-24 pb-4">
         {isChat.map((bubble, index) => (
           <Bubble
             key={index}
