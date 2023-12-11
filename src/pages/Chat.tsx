@@ -8,7 +8,10 @@ import Hood from "../components/Hood";
 import { Client, CompatClient, Stomp } from "@stomp/stompjs";
 import { globalConfig } from "../utils/globals";
 import SockJS from "sockjs-client";
-import { getProfileData } from "../apis/apis";
+import { getChatList, getProfileData, getProfileImage } from "../apis/apis";
+import { IUserProps } from "./User";
+import ChatTopBar from "../components/ChatTopBar";
+import Loading from "../components/Loading";
 
 interface IChatProps {
   channelId: string;
@@ -17,9 +20,23 @@ interface IChatProps {
   writerNickname: string;
 }
 
+interface IChatroomProps {
+  chatroomChannelId: string;
+  profileResponseList: IUserProps[];
+}
+
 export default function Chat() {
   const [isName, setIsName] = useState<string>("");
   const [isChat, setIsChat] = useState<IChatProps[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isPartner, setIsPartner] = useState<IUserProps[]>([
+    {
+      memberNickname: "",
+      imageName: null,
+      profileStateMessage: "",
+      type: null,
+    },
+  ]);
   const { register, handleSubmit, reset } = useForm<{ message: string }>();
   const chatRef = useRef<HTMLDivElement | null>(null);
   const { chatroomChannelId } = useParams();
@@ -94,6 +111,22 @@ export default function Chat() {
           connectHandler();
         }
       });
+
+      await getChatList()
+        .then((response: any) => {
+          // console.log(response);
+          if (response.status === 200 && response.data?.status === 200) {
+            response.data.result.map((chatroom: IChatroomProps) => {
+              if (chatroom.chatroomChannelId === chatroomChannelId) {
+                // 일치하는 방을 찾았을 경우
+                setIsPartner(chatroom.profileResponseList);
+              }
+            });
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     };
 
     connection();
@@ -105,16 +138,16 @@ export default function Chat() {
 
   return (
     <div className="min-h-screen flex w-full flex-col justify-start">
-      <Hood title={` 님과의 채팅`} />
+      {isLoading && <Loading />}
+      <Hood
+        title={`${isPartner.map(
+          (partner) => partner.memberNickname
+        )} 님과의 채팅`}
+      />
       <div className="relative  z-20">
         {/* other-user */}
         <div className="fixed w-full bg-violet-100 border-b transition-colors px-4 h-auto bg-transparent flex flex-row justify-between items-center gap-6 pt-2 pb-2 border-violet-50">
-          <div className="flex flex-row justify-between w-auto gap-4">
-            <div className="h-16 w-16 bg-violet-200 rounded-3xl" />
-            <div className="flex flex-col justify-around">
-              <b className="text-slate-700 text-md">{isName}</b>
-            </div>
-          </div>
+          <ChatTopBar isPartner={isPartner} setIsLoading={setIsLoading} />
         </div>
       </div>
       <div className="bg-violet-300  custom-max-h pt-20 pb-4">
