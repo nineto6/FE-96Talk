@@ -173,7 +173,7 @@ export default function Chat() {
       <div className="relative  z-20">
         {/* other-user */}
 
-        <div className="px-8 fixed w-full bg-violet-100 border-b transition-colors  h-auto bg-transparent flex flex-row justify-between items-stretch pt-2 pb-2 border-violet-50">
+        <div className="px-8 fixed w-full bg-white border-b transition-colors h-auto flex flex-row justify-between items-stretch pt-2 pb-2 ">
           {/* <TopBar /> */}
 
           <ChatTopBar isPartner={isPartner} setIsLoading={setIsLoading} />
@@ -198,7 +198,7 @@ export default function Chat() {
           </div>
         </div>
       </div>
-      <div className="bg-violet-300  custom-max-h pt-20 pb-4">
+      <div className="bg-white  custom-max-h pt-20 pb-4">
         {isChat.map((bubble, index) => (
           <Bubble
             key={index}
@@ -211,7 +211,7 @@ export default function Chat() {
 
       <div
         ref={chatRef}
-        className="w-full h-24 bg-violet-100 flex flex-col justify-center items-center"
+        className="w-full h-24 bg-themePurple flex flex-col justify-center items-center"
       >
         <form
           onSubmit={handleSubmit(onValid)}
@@ -227,7 +227,7 @@ export default function Chat() {
             className="w-full px-8 rounded-l-2xl focus:ring-0 outline-none "
             autoComplete="off"
           />
-          <button className="bg-violet-500 text-slate-700 focus:ring-0 outline-none p-3 rounded-r-2xl">
+          <button className="bg-themeDarkPurple text-slate-700 focus:ring-0 outline-none p-3 rounded-r-2xl">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

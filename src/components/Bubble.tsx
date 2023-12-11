@@ -27,12 +27,22 @@ export default function Bubble({ text, speaker, time }: IBubbleProps) {
       </div>
 
       <div
-        className={`p-4 rounded-lg ${
+        className={`p-4 rounded-lg relative ${
           speaker
-            ? "bg-themeDarkPurple text-slate-200"
-            : "bg-themePurple text-slate-200"
+            ? "bg-themePurple text-slate-200"
+            : "bg-slate-200 text-slate-700"
         }`}
       >
+        <div
+          className={`absolute top-0  w-4 h-2 ${
+            speaker
+              ? "bg-themePurple text-slate-200 -right-2"
+              : "bg-slate-200 text-slate-700 -left-2"
+          } left-cut`}
+          style={{
+            clipPath: "polygon(50% 100%, 0% 0%, 100% 0%)",
+          }}
+        />
         <p className="break-all w-fit max-w-xs">{text}</p>
       </div>
     </div>
