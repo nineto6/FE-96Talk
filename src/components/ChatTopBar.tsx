@@ -45,7 +45,7 @@ export default function ChatTopBar({
   }, [isPartner]);
 
   return (
-    <div className="flex px-4 flex-row justify-start w-auto gap-4">
+    <div className="flex flex-row justify-start w-auto gap-4">
       <div
         className="h-16 w-16 bg-violet-200 rounded-3xl cursor-pointer"
         style={{

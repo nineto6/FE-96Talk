@@ -204,7 +204,7 @@ export default function Profile() {
               >
                 <div className="flex flex-col justify-center items-center">
                   <span
-                    className="w-32 h-32 bg-violet-400 mb-4 rounded-full relative"
+                    className="w-32 h-32 bg-violet-200 mb-4 rounded-full relative"
                     style={{
                       backgroundImage: `url(${imagePreview})`,
                       backgroundSize: "cover", // 이미지를 span 크기에 맞게 조절

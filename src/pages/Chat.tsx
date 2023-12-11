@@ -53,6 +53,10 @@ export default function Chat() {
     reset();
   };
 
+  const moveBack = () => {
+    nav(-1);
+  };
+
   const connectHandler = async () => {
     const token = globalConfig.isToken;
 
@@ -169,13 +173,32 @@ export default function Chat() {
       <div className="relative  z-20">
         {/* other-user */}
 
-        <div className="fixed w-full bg-violet-100 border-b transition-colors  h-auto bg-transparent flex flex-col justify-between items-stretch  pb-2 border-violet-50">
-          <TopBar />
+        <div className="px-8 fixed w-full bg-violet-100 border-b transition-colors  h-auto bg-transparent flex flex-row justify-between items-stretch pt-2 pb-2 border-violet-50">
+          {/* <TopBar /> */}
 
           <ChatTopBar isPartner={isPartner} setIsLoading={setIsLoading} />
+          <div
+            className="flex flex-col justify-center items-center"
+            onClick={moveBack}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6 cursor-pointer"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+              />
+            </svg>
+          </div>
         </div>
       </div>
-      <div className="bg-violet-300  custom-max-h pt-24 pb-4">
+      <div className="bg-violet-300  custom-max-h pt-20 pb-4">
         {isChat.map((bubble, index) => (
           <Bubble
             key={index}
@@ -190,7 +213,10 @@ export default function Chat() {
         ref={chatRef}
         className="w-full h-24 bg-violet-100 flex flex-col justify-center items-center"
       >
-        <form onSubmit={handleSubmit(onValid)}>
+        <form
+          onSubmit={handleSubmit(onValid)}
+          className="w-full md:w-2/3 px-16 flex flex-row"
+        >
           <input
             {...register("message", {
               required: "채팅 내용을 입력하세요.",
@@ -198,8 +224,19 @@ export default function Chat() {
             type="text"
             id="message"
             name="message"
-            className="w-full"
+            className="w-full px-8 rounded-l-2xl focus:ring-0 outline-none "
+            autoComplete="off"
           />
+          <button className="bg-violet-500 text-slate-700 focus:ring-0 outline-none p-3 rounded-r-2xl">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6 text-white"
+            >
+              <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+            </svg>
+          </button>
         </form>
       </div>
     </div>
