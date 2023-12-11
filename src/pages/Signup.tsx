@@ -6,6 +6,7 @@ import Hood from "../components/Hood";
 import { postSignup } from "../apis/apis";
 import { useState } from "react";
 import Loading from "../components/Loading";
+import Messenger from "../components/Messenger";
 
 export interface ISignupProps {
   memberEmail: string;
@@ -17,6 +18,8 @@ export interface ISignupProps {
 export default function Signup() {
   const nav = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isErrorText, setIsErrorText] = useState("");
 
   const {
     register,
@@ -44,6 +47,10 @@ export default function Signup() {
         }
       } catch (error) {
         console.error("Signup failed", error);
+        if (error instanceof Error) {
+          setIsError(true);
+          setIsErrorText(error.message);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -55,6 +62,7 @@ export default function Signup() {
       <Hood title="회원가입" />
       <TopBar />
       {isLoading && <Loading />}
+      {isError && <Messenger text={isErrorText} setIsError={setIsError} />}
       <div className="flex flex-col h-full justify-center items-center">
         {/* Logo */}
 
