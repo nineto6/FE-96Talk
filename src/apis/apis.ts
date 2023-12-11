@@ -51,8 +51,11 @@ export async function postSignup(data: ISignupProps): Promise<boolean> {
       }
     })
     .catch((error) => {
-      if (!error.message) {
+      if (!error.response) {
+        console.error("Server Disconnected");
         throw new Error("Server Disconnected");
+      } else {
+        console.error("Server Error:", error.response.status);
       }
       throw error;
     });
@@ -154,5 +157,15 @@ export function postCreateChatroom(friendNickname: string) {
 
   return tokenRefresher.post(url, {
     friendNickname,
+  });
+}
+
+export function getChatroomLog(channelId: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/chat`;
+
+  return tokenRefresher.get(url, {
+    params: {
+      channelId,
+    },
   });
 }

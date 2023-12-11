@@ -3,12 +3,16 @@ import TopBar from "../components/TopBar";
 import Bubble from "../components/Bubble";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
-import { BubbleList } from "../jsons/dummy";
 import Hood from "../components/Hood";
 import { Client, CompatClient, Stomp } from "@stomp/stompjs";
 import { globalConfig } from "../utils/globals";
 import SockJS from "sockjs-client";
-import { getChatList, getProfileData, getProfileImage } from "../apis/apis";
+import {
+  getChatList,
+  getChatroomLog,
+  getProfileData,
+  getProfileImage,
+} from "../apis/apis";
 import { IUserProps } from "./User";
 import ChatTopBar from "../components/ChatTopBar";
 import Loading from "../components/Loading";
@@ -116,10 +120,24 @@ export default function Chat() {
         .then((response: any) => {
           // console.log(response);
           if (response.status === 200 && response.data?.status === 200) {
-            response.data.result.map((chatroom: IChatroomProps) => {
+            response.data.result.map(async (chatroom: IChatroomProps) => {
               if (chatroom.chatroomChannelId === chatroomChannelId) {
                 // 일치하는 방을 찾았을 경우
-                setIsPartner(chatroom.profileResponseList);
+                try {
+                  setIsPartner(chatroom.profileResponseList);
+                  const logResponse = await getChatroomLog(
+                    chatroom.chatroomChannelId
+                  );
+                  if (
+                    logResponse.status === 200 &&
+                    logResponse.data?.status === 200
+                  ) {
+                    setIsChat(logResponse.data.result);
+                  }
+                } catch (error) {
+                  console.error(error);
+                } finally {
+                }
               }
             });
           }
@@ -133,7 +151,11 @@ export default function Chat() {
   }, []);
 
   useEffect(() => {
-    chatRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatRef.current) {
+      chatRef.current.scrollIntoView({
+        behavior: "auto",
+      });
+    }
   }, [isChat]);
 
   return (
