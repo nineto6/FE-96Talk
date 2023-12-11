@@ -8,6 +8,7 @@ import { Client, CompatClient, Stomp } from "@stomp/stompjs";
 import { globalConfig } from "../utils/globals";
 import SockJS from "sockjs-client";
 import {
+  deleteChatRoom,
   getChatList,
   getChatroomLog,
   getProfileData,
@@ -16,6 +17,7 @@ import {
 import { IUserProps } from "./User";
 import ChatTopBar from "../components/ChatTopBar";
 import Loading from "../components/Loading";
+import SideTabBar from "../components/SideTabBar";
 
 interface IChatProps {
   channelId: string;
@@ -45,6 +47,7 @@ export default function Chat() {
   const chatRef = useRef<HTMLDivElement | null>(null);
   const { chatroomChannelId } = useParams();
   const nav = useNavigate();
+  const [isTab, setIsTab] = useState<boolean>(false);
 
   let client = useRef<CompatClient>();
 
@@ -53,8 +56,28 @@ export default function Chat() {
     reset();
   };
 
+  const onTab = () => {
+    setIsTab((current) => !current);
+  };
+
   const moveBack = () => {
     nav(-1);
+  };
+
+  const deleteRoom = async () => {
+    try {
+      setIsLoading(true);
+      if (chatroomChannelId) {
+        const response = await deleteChatRoom(chatroomChannelId);
+        console.log(response);
+
+        nav("/chats");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const connectHandler = async () => {
@@ -165,6 +188,7 @@ export default function Chat() {
   return (
     <div className="min-h-screen flex w-full flex-col justify-start">
       {isLoading && <Loading />}
+      {isTab && <SideTabBar setIsTab={setIsTab} deleteChatRoom={deleteRoom} />}
       <Hood
         title={`${isPartner.map(
           (partner) => partner.memberNickname
@@ -177,24 +201,40 @@ export default function Chat() {
           {/* <TopBar /> */}
 
           <ChatTopBar isPartner={isPartner} setIsLoading={setIsLoading} />
-          <div
-            className="flex flex-col justify-center items-center"
-            onClick={moveBack}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6 cursor-pointer"
+          <div className="flex flex-row gap-4">
+            <div
+              className="flex flex-col justify-center items-center"
+              onClick={moveBack}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-              />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6 cursor-pointer"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+                />
+              </svg>
+            </div>
+            <div className="flex justify-center items-center" onClick={onTab}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-8 h-8 cursor-pointer"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>

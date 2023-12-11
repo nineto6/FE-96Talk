@@ -22,8 +22,8 @@ export default function Bubble({ text, speaker, time }: IBubbleProps) {
         speaker ? "flex-row" : "flex-row-reverse"
       }`}
     >
-      <div className="flex justify-center items-center">
-        <h2>{isTime}</h2>
+      <div className="flex flex-col justify-end items-center">
+        <h2 className="text-xs">{isTime}</h2>
       </div>
 
       <div

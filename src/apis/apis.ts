@@ -169,3 +169,13 @@ export function getChatroomLog(channelId: string) {
     },
   });
 }
+
+export function deleteChatRoom(channelId: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom`;
+
+  return tokenRefresher.delete(url, {
+    data: {
+      channelId,
+    },
+  });
+}
