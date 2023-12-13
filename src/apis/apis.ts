@@ -131,9 +131,19 @@ export function getSearchProfileList(data: IAddDataProps) {
 export function postAddFriend(friendNickname: string) {
   const url = `${process.env.REACT_APP_BASE_URL}api/friends`;
 
-  return tokenRefresher.post(url, {
-    friendNickname,
-  });
+  return tokenRefresher
+    .post(url, {
+      friendNickname,
+    })
+    .catch((error) => {
+      if (!error.response) {
+        console.error("Server Disconnected");
+        throw new Error("Server Disconnected");
+      } else {
+        console.error("Server Error:", error.response.status);
+      }
+      throw error;
+    });
 }
 
 export function getUserProfileData(memberNickname: string) {
@@ -189,6 +199,16 @@ export function deleteChatRoom(channelId: string) {
 
   return tokenRefresher.delete(url, {
     data: {
+      channelId,
+    },
+  });
+}
+
+export function getFindFriend(channelId: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/${channelId}`;
+
+  return tokenRefresher.get(url, {
+    params: {
       channelId,
     },
   });

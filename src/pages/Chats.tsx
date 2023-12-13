@@ -3,7 +3,6 @@ import ChatList from "../components/ChatList";
 import Hood from "../components/Hood";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
-import { chatList } from "../jsons/dummy";
 import { getChatList } from "../apis/apis";
 import { IUserProps } from "./User";
 
