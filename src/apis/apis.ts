@@ -152,12 +152,26 @@ export function deleteFriend(friendNickname: string) {
   });
 }
 
-export function postCreateChatroom(friendNickname: string) {
+export async function postCreateChatroom(friendNickname: string) {
   const url = `${process.env.REACT_APP_BASE_URL}api/chatroom`;
 
-  return tokenRefresher.post(url, {
-    friendNickname,
-  });
+  return tokenRefresher
+    .post(url, {
+      friendNickname,
+    })
+    .catch((error) => {
+      if (error.response?.status === 400) {
+        throw new Error("이미 존재하는 채팅방 입니다.");
+      }
+      if (!error.response) {
+        console.error("Server Disconnected");
+        throw new Error("Server Disconnected");
+      } else {
+        console.error("Server Error:", error.response.status);
+      }
+
+      throw error;
+    });
 }
 
 export function getChatroomLog(channelId: string) {

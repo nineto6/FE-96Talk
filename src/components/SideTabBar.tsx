@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 interface ISideTabBarProps {
   setIsTab: Function;
   deleteChatRoom: Function;
@@ -10,7 +12,7 @@ export default function SideTabBar({
   return (
     <div className="bg-black bg-opacity-70 h-full w-full z-50 fixed flex flex-col justify-center items-end">
       <div
-        className={`h-full shadow-xl flex flex-col justify-between items-center md:w-1/4 w-2/3 p-8 bg-themePurple opacity-none`}
+        className={`animate-slidein h-full shadow-xl flex flex-col justify-between items-center md:w-1/4 w-2/3 p-8 bg-themePurple opacity-none`}
       >
         <div className="flex flex-row items-center w-full justify-start mb-4 pb-4">
           <svg

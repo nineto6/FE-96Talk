@@ -21,9 +21,8 @@ export default function FriendList({
 
   useEffect(() => {
     const getImage = async () => {
-      if (imageName && type) {
-        try {
-          setIsLoading(true);
+      try {
+        if (imageName && type) {
           const imageResponse = await getProfileImage(imageName, type);
           const reader = new FileReader();
           reader.readAsDataURL(imageResponse.data);
@@ -31,9 +30,9 @@ export default function FriendList({
             const base64data = reader.result as string;
             setIsImage(base64data);
           };
-        } finally {
-          setIsLoading(false);
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -42,7 +41,7 @@ export default function FriendList({
 
   return (
     <>
-      {/* {isLoading && <Loading />} */}
+      {isLoading && <Loading />}
       <div
         onClick={onMove}
         className={`

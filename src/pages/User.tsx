@@ -5,6 +5,7 @@ import TopBar from "../components/TopBar";
 import { useEffect, useState } from "react";
 import {
   deleteFriend,
+  getChatList,
   getFriendList,
   getProfileImage,
   getUserProfileData,
@@ -12,6 +13,7 @@ import {
   postCreateChatroom,
 } from "../apis/apis";
 import Loading from "../components/Loading";
+import Messenger from "../components/Messenger";
 
 export interface IUserProps {
   memberNickname: string;
@@ -31,6 +33,8 @@ export default function User() {
   });
 
   const [isFriend, setIsFriend] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isErrorText, setIsErrorText] = useState("");
   const { userNumber } = useParams();
   const nav = useNavigate();
 
@@ -39,10 +43,17 @@ export default function User() {
       setIsLoading(true);
       if (userNumber) {
         const response = await postCreateChatroom(userNumber);
-        nav(`/chats/${userNumber}`);
+        if (response.data?.status === 201 && response.data.result) {
+          nav(`/chats/${response.data.result}`);
+        }
+        // nav(`/chats/${userNumber}`);
       }
     } catch (error) {
-      console.log("Cannot create chatroom");
+      // console.log("Cannot create chatroom");
+      if (error instanceof Error) {
+        setIsError(true);
+        setIsErrorText(error.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -148,6 +159,7 @@ export default function User() {
         <Loading />
       ) : (
         <>
+          {isError && <Messenger text={isErrorText} setIsError={setIsError} />}
           <Hood title={`${isData.memberNickname}님의 프로필`} />
           <div className="bg-white flex flex-col justify-start h-screen">
             <TopBar />
