@@ -185,7 +185,7 @@ export async function postCreateChatroom(friendNickname: string) {
 }
 
 export function getChatroomLog(channelId: string) {
-  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/chat`;
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/${channelId}/messages`;
 
   return tokenRefresher.get(url, {
     params: {

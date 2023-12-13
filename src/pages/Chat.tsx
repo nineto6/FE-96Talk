@@ -186,11 +186,12 @@ export default function Chat() {
                 try {
                   setIsPartner(chatroom.profileResponseList);
                   await getChatroomLog(chatroom.chatroomChannelId).then(
-                    (response) => {
+                    (response: any) => {
                       if (
                         response.status === 200 &&
                         response.data?.status === 200
                       ) {
+                        console.log(response);
                         setIsChat(response.data.result);
                       }
                     }
