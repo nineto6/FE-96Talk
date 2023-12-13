@@ -43,9 +43,12 @@ export default function User() {
       setIsLoading(true);
       if (userNumber) {
         const response = await postCreateChatroom(userNumber);
-        if (response.data?.status === 201 && response.data.result) {
-          nav(`/chats/${response.data.result}`);
+        if (response.data.result) {
+          if (response.data?.status === 201 || response.data.status) {
+            nav(`/chats/${response.data.result}`);
+          }
         }
+
         // nav(`/chats/${userNumber}`);
       }
     } catch (error) {
