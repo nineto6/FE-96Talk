@@ -226,6 +226,12 @@ export default function Chat() {
     };
 
     connection();
+
+    return () => {
+      if (client.current) {
+        client.current.unsubscribe(`/sub/chat/${chatroomChannelId}`);
+      }
+    };
   }, []);
 
   useEffect(() => {
