@@ -14,7 +14,7 @@ import initialStomp from "./utils/initialStomp";
 export default function App() {
   const nav = useNavigate();
   useEffect(() => {
-    if (stompClient.isConnect === false) {
+    if (stompClient.instance === null) {
       // console.log("NO");
       const connection = async () => {
         await getProfileData()

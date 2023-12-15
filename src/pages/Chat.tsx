@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import Hood from "../components/Hood";
 import { Client, CompatClient, Stomp } from "@stomp/stompjs";
-import { globalConfig } from "../utils/globals";
+import { globalConfig, stompClient } from "../utils/globals";
 import SockJS from "sockjs-client";
 import {
   deleteChatRoom,
@@ -22,6 +22,7 @@ import Loading from "../components/Loading";
 import SideTabBar from "../components/SideTabBar";
 import Warning from "../components/Warning";
 import Messenger from "../components/Messenger";
+import initialStomp from "../utils/initialStomp";
 
 interface IChatProps {
   channelId: string;
@@ -94,44 +95,28 @@ export default function Chat() {
   const connectHandler = async () => {
     const token = globalConfig.isToken;
 
-    client.current = Stomp.over(() => {
-      const sock = new SockJS(`https://nineto6.p-e.kr/api/ws`);
-      return sock;
-    });
-
-    client.current.connect(
-      {
-        Authorization: `Bearer ${token}`,
-      },
-      () => {
-        client.current?.subscribe(
-          `/sub/chat/${chatroomChannelId}`,
-          (body) => {
-            // console.log(JSON.parse(body.body));
-            setIsChat((current) => {
-              return [...current, JSON.parse(body.body)];
-            });
-          },
-          { Authorization: `Bearer ${token}` }
-        );
-      },
-      () => {
-        // error 로직
-        // alert("error");
-        nav("/");
-      }
-    );
-
-    client.current.onStompError = (frame) => {
-      console.log("Broker reported error: " + frame.headers["message"]);
-      console.log("Additional details: " + frame.body);
-    };
+    if (stompClient.instance !== null) {
+      stompClient.instance?.subscribe(
+        `/sub/chat/${chatroomChannelId}`,
+        (body) => {
+          // console.log(JSON.parse(body.body));
+          setIsChat((current) => {
+            return [...current, JSON.parse(body.body)];
+          });
+        },
+        { Authorization: `Bearer ${token}` }
+      );
+      stompClient.instance.onStompError = (frame) => {
+        console.log("Broker reported error: " + frame.headers["message"]);
+        console.log("Additional details: " + frame.body);
+      };
+    }
   };
 
   const publish = (chat: string) => {
     const token = globalConfig.isToken;
 
-    client.current?.publish({
+    stompClient.instance?.publish({
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -227,11 +212,18 @@ export default function Chat() {
 
     connection();
 
-    return () => {
-      if (client.current) {
-        client.current.unsubscribe(`/sub/chat/${chatroomChannelId}`);
-        client.current.disconnect();
+    const handleBeforeUnload = () => {
+      if (stompClient.instance) {
+        stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
       }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      if (stompClient.instance) {
+        stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
+      }
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
