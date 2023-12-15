@@ -234,6 +234,22 @@ export default function Chat() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     if (client.current) {
+  //       client.current.disconnect(() => {
+  //         console.log("Disconnected from server");
+  //       });
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
+
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollIntoView({

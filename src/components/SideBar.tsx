@@ -1,10 +1,8 @@
-import { useRecoilState } from "recoil";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { deleteLogout } from "../apis/apis";
 import Loading from "./Loading";
-import Cookies from "js-cookie";
+import { stompClient } from "../utils/globals";
 
 export default function SideBar() {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +22,8 @@ export default function SideBar() {
       if (request) {
         // 정상적으로 제거 되면
         // Cookies.remove("RT");
+        stompClient.instance?.disconnect();
+        stompClient.isConnect = false;
       }
     } catch (error) {
       // console.error(error);

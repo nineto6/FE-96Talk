@@ -7,9 +7,11 @@ import Loading from "../components/Loading";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import Hood from "../components/Hood";
-import { postLogin } from "../apis/apis";
+import { getProfileData, postLogin } from "../apis/apis";
 import Cookies from "js-cookie";
 import Messenger from "../components/Messenger";
+import { stompClient } from "../utils/globals";
+import initialStomp from "../utils/initialStomp";
 
 export interface ILoginProps {
   memberEmail: string;
@@ -37,6 +39,25 @@ export default function Login() {
       const success = await postLogin(data);
       if (success) {
         // 성공 시 홈화면으로 return
+        if (stompClient.isConnect === false) {
+          // console.log("NO");
+          const connection = async () => {
+            await getProfileData()
+              .then((response: any) => {
+                if (response.status === 200 && response.data?.status === 200) {
+                  const { memberNickname } = response.data.result;
+                  // console.log(memberNickname);
+                  initialStomp(memberNickname);
+                }
+              })
+              .catch((error: any) => {
+                console.error(error);
+                nav("/login");
+              });
+          };
+
+          connection();
+        }
         nav("/");
         console.log("Login Success");
       }
