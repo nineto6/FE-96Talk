@@ -25,6 +25,8 @@ export default function initialStomp(memberNickname: string) {
               body: `${message}`,
             }); // 여기서 body를 사용하여 시스템 알림 생성
           }
+
+          globalConfig.isAlertCounter += 1;
         },
         { Authorization: `Bearer ${token}` }
       );

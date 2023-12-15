@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { globalConfig } from "./globals";
+
 export async function requestNotification() {
   // 현재 알림 권한 상태 확인
   let permission = Notification.permission;
@@ -9,3 +12,19 @@ export async function requestNotification() {
 
   return permission;
 }
+
+export const useGlobalAlertCounter = () => {
+  const [counter, setCounter] = useState(globalConfig.isAlertCounter);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (globalConfig.isAlertCounter !== counter) {
+        setCounter(globalConfig.isAlertCounter);
+      }
+    }, 500); // 1초마다 확인
+
+    return () => clearInterval(interval);
+  }, [counter]);
+
+  return counter;
+};

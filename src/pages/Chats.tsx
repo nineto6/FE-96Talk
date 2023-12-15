@@ -5,6 +5,8 @@ import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
 import { getChatList } from "../apis/apis";
 import { IUserProps } from "./User";
+import { globalConfig } from "../utils/globals";
+import { useGlobalAlertCounter } from "../utils/notification";
 
 export interface IChatListProps {
   chatroomChannelId: string;
@@ -20,6 +22,7 @@ export interface IRecentProps {
 export default function Chats() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isList, setIsList] = useState<IChatListProps[]>([]);
+  const alertCounter = useGlobalAlertCounter();
 
   useEffect(() => {
     const getList = async () => {
@@ -36,8 +39,9 @@ export default function Chats() {
       }
     };
 
+    console.log(globalConfig.isAlertCounter);
     getList();
-  }, []);
+  }, [alertCounter]);
 
   return (
     <div className="flex flex-row">
