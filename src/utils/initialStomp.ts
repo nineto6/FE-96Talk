@@ -14,7 +14,7 @@ export default function initialStomp(memberNickname: string) {
     },
     () => {
       stompClient.instance?.subscribe(
-        `/sub/chat/${memberNickname}`,
+        `/sub/alert/${memberNickname}`,
         (body) => {
           console.log(body);
         },

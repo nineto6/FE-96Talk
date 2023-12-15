@@ -230,6 +230,7 @@ export default function Chat() {
     return () => {
       if (client.current) {
         client.current.unsubscribe(`/sub/chat/${chatroomChannelId}`);
+        client.current.disconnect();
       }
     };
   }, []);

@@ -90,14 +90,14 @@ export async function patchProfileData(formData: FormData) {
   });
 }
 
-export async function deleteLogout(): Promise<boolean> {
+export async function deleteLogout() {
   const url = `${process.env.REACT_APP_BASE_URL}api/auth`;
 
   return tokenRefresher
     .delete(url)
     .then((response) => {
       if (response.data.status === 200) {
-        return true;
+        return response;
       } else {
         throw new Error("Logout Failed");
       }

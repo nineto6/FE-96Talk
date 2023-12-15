@@ -19,9 +19,12 @@ export default function SideBar() {
     try {
       setIsLoading(true);
       const request = await deleteLogout();
+      console.log(request);
+
       if (request) {
         // 정상적으로 제거 되면
         // Cookies.remove("RT");
+        stompClient.instance?.unsubscribe(`/sub/alert/${request.data.result}`);
         stompClient.instance?.disconnect();
         stompClient.isConnect = false;
       }
