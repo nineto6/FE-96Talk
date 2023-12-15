@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { deleteLogout } from "../apis/apis";
 import Loading from "./Loading";
 import { stompClient } from "../utils/globals";
+import { requestNotification } from "../utils/notification";
 
 export default function SideBar() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isAlert, setIsAlert] = useState(Notification.permission);
 
   const nav = useNavigate();
   const location = useLocation();
@@ -14,6 +16,13 @@ export default function SideBar() {
   useEffect(() => {
     setIsState(location.pathname.split("/")[1]);
   }, [location]);
+
+  const onAlert = () => {
+    requestNotification().then((permission) => {
+      console.log(`알림 권한 상태: ${permission}`);
+      setIsAlert(permission);
+    });
+  };
 
   const onLogout = async () => {
     try {
@@ -26,6 +35,7 @@ export default function SideBar() {
         // Cookies.remove("RT");
         stompClient.instance?.unsubscribe(`/sub/alert/${request.data.result}`);
         stompClient.instance?.disconnect();
+        stompClient.instance = null;
         stompClient.isConnect = false;
       }
     } catch (error) {
@@ -115,6 +125,36 @@ export default function SideBar() {
           d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
         />
       </svg>
+
+      {isAlert === "denied" ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="w-6 h-6"
+        >
+          <path d="M3.53 2.47a.75.75 0 00-1.06 1.06l18 18a.75.75 0 101.06-1.06l-18-18zM20.57 16.476c-.223.082-.448.161-.674.238L7.319 4.137A6.75 6.75 0 0118.75 9v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206z" />
+          <path
+            fillRule="evenodd"
+            d="M5.25 9c0-.184.007-.366.022-.546l10.384 10.384a3.751 3.751 0 01-7.396-1.119 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="w-6 h-6 text-white"
+        >
+          <path d="M5.85 3.5a.75.75 0 00-1.117-1 9.719 9.719 0 00-2.348 4.876.75.75 0 001.479.248A8.219 8.219 0 015.85 3.5zM19.267 2.5a.75.75 0 10-1.118 1 8.22 8.22 0 011.987 4.124.75.75 0 001.48-.248A9.72 9.72 0 0019.266 2.5z" />
+          <path
+            fillRule="evenodd"
+            d="M12 2.25A6.75 6.75 0 005.25 9v.75a8.217 8.217 0 01-2.119 5.52.75.75 0 00.298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 107.48 0 24.583 24.583 0 004.83-1.244.75.75 0 00.298-1.205 8.217 8.217 0 01-2.118-5.52V9A6.75 6.75 0 0012 2.25zM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 004.496 0l.002.1a2.25 2.25 0 11-4.5 0z"
+            clipRule="evenodd"
+          />
+        </svg>
+      )}
     </div>
   );
 }

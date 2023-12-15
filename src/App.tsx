@@ -10,10 +10,14 @@ import User from "./pages/User";
 import { stompClient } from "./utils/globals";
 import { getProfileData } from "./apis/apis";
 import initialStomp from "./utils/initialStomp";
+import { requestNotification } from "./utils/notification";
 
 export default function App() {
   const nav = useNavigate();
   useEffect(() => {
+    requestNotification().then((permission) => {
+      console.log(`알림 권한 상태: ${permission}`);
+    });
     if (stompClient.instance === null) {
       // console.log("NO");
       const connection = async () => {

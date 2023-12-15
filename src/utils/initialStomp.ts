@@ -15,8 +15,16 @@ export default function initialStomp(memberNickname: string) {
     () => {
       stompClient.instance?.subscribe(
         `/sub/alert/${memberNickname}`,
-        (body) => {
-          console.log(body);
+        (response) => {
+          console.log(JSON.parse(response.body));
+          const { channelId, message, regdate, writerNickname } = JSON.parse(
+            response.body
+          );
+          if (Notification.permission === "granted") {
+            new Notification(`${writerNickname}`, {
+              body: `${message}`,
+            }); // 여기서 body를 사용하여 시스템 알림 생성
+          }
         },
         { Authorization: `Bearer ${token}` }
       );
