@@ -3,6 +3,8 @@ import { IChatListProps } from "../pages/Chats";
 import { useEffect, useState } from "react";
 import { getProfileImage } from "../apis/apis";
 import dateFormatter from "../utils/formatter";
+import { globalConfig } from "../utils/globals";
+import { useGlobalAlertCounter } from "../utils/notification";
 
 export default function FriendList({
   chatroomChannelId,
@@ -13,6 +15,7 @@ export default function FriendList({
   const [isImage, setIsImage] = useState<string>("");
   const [isTime, setIsTime] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const alertCounter = useGlobalAlertCounter();
 
   const onMove = () => {
     nav(`${chatroomChannelId}`);
@@ -43,7 +46,7 @@ export default function FriendList({
       dateFormatter(recentChat.regdate, setIsTime);
     }
     getImage();
-  }, []);
+  }, [alertCounter]);
 
   return (
     <div

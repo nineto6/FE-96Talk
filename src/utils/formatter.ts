@@ -14,8 +14,10 @@ export default function dateFormatter(time: string, setIsTime: Function) {
     // 같은 날짜 일 때
     if (hour < 12) {
       setIsTime(`오전 ${formatNumber(hour)}:${formatNumber(min)}`);
-    } else if (12 <= hour) {
+    } else if (12 < hour) {
       setIsTime(`오후 ${formatNumber(hour - 12)}:${formatNumber(min)}`);
+    } else if (12 === hour) {
+      setIsTime(`오후 12:${formatNumber(min)}`);
     }
   }
 }
