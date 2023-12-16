@@ -10,6 +10,7 @@ export default function FriendList({
   chatroomChannelId,
   profileResponseList,
   recentChat,
+  counter,
 }: IChatListProps) {
   const nav = useNavigate();
   const [isImage, setIsImage] = useState<string>("");
@@ -73,7 +74,16 @@ export default function FriendList({
           <p className="text-slate-500 text-sm">{recentChat?.message || ""}</p>
         </div>
       </div>
-      <p className="py-1 px-4 text-slate-500 text-xs">{isTime || ""}</p>
+      <div className="flex flex-row gap-2 justify-between items-center">
+        <p className="py-1 px-4 text-slate-500 text-xs">{isTime || ""}</p>
+        <div
+          className={`text-slate-50 bg-red-400 px-2 min-w-[24px] min-h-[24px] rounded-full flex flex-col justify-center items-center ${
+            counter === 0 && "hidden"
+          }`}
+        >
+          <h2>{counter}</h2>
+        </div>
+      </div>
     </div>
   );
 }

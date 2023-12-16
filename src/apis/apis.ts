@@ -213,3 +213,9 @@ export function getFindFriend(channelId: string) {
     },
   });
 }
+
+export function getAlertCounter() {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/alerts`;
+
+  return tokenRefresher.get(url);
+}

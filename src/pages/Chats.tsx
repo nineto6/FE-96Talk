@@ -3,7 +3,7 @@ import ChatList from "../components/ChatList";
 import Hood from "../components/Hood";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
-import { getChatList } from "../apis/apis";
+import { getAlertCounter, getChatList } from "../apis/apis";
 import { IUserProps } from "./User";
 import { globalConfig } from "../utils/globals";
 import { useGlobalAlertCounter } from "../utils/notification";
@@ -12,11 +12,17 @@ export interface IChatListProps {
   chatroomChannelId: string;
   profileResponseList: IUserProps[];
   recentChat: IRecentProps;
+  counter: number;
 }
 
 export interface IRecentProps {
   message: string;
   regdate: string;
+}
+
+export interface IAlertProps {
+  channelId: string;
+  count: number;
 }
 
 export default function Chats() {
@@ -27,10 +33,31 @@ export default function Chats() {
   useEffect(() => {
     const getList = async () => {
       try {
-        const response = await getChatList();
-        if (response.status === 200 && response.data?.status === 200) {
-          console.log(response.data.result);
-          setIsList(response.data.result);
+        const chatListResponse = await getChatList();
+        if (
+          chatListResponse.status === 200 &&
+          chatListResponse.data?.status === 200
+        ) {
+          // console.log(response.data.result);
+          let newChatList = chatListResponse.data.result;
+
+          const alertCounterResponse = await getAlertCounter();
+          if (alertCounterResponse.status === 200) {
+            const alertCounterList =
+              alertCounterResponse.data.result.alertChatList;
+
+            newChatList = newChatList.map((chatItem: IChatListProps) => {
+              const alertCounterItem = alertCounterList.find(
+                (alertItem: IAlertProps) =>
+                  alertItem.channelId === chatItem.chatroomChannelId
+              );
+              return alertCounterItem
+                ? { ...chatItem, counter: alertCounterItem.count }
+                : chatItem;
+            });
+          }
+
+          setIsList(newChatList);
         }
       } catch (error) {
         console.error(error);
@@ -96,6 +123,7 @@ export default function Chats() {
               recentChat={room.recentChat}
               chatroomChannelId={room.chatroomChannelId}
               profileResponseList={room.profileResponseList}
+              counter={room.counter}
             />
           ))}
         </div>
