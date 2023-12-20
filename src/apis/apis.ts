@@ -214,8 +214,8 @@ export function getFindFriend(channelId: string) {
   });
 }
 
-export function getAlertCounter() {
-  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/alerts`;
+export function getAlertCounter(channelId: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/${channelId}/alerts`;
 
   return tokenRefresher.get(url);
 }

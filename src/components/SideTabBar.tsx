@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface ISideTabBarProps {
   setIsTab: Function;
   deleteChatRoom: Function;

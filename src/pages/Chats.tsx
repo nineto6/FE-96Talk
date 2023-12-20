@@ -12,7 +12,7 @@ export interface IChatListProps {
   chatroomChannelId: string;
   profileResponseList: IUserProps[];
   recentChat: IRecentProps;
-  counter: number;
+  // counter: number;
 }
 
 export interface IRecentProps {
@@ -38,24 +38,28 @@ export default function Chats() {
           chatListResponse.status === 200 &&
           chatListResponse.data?.status === 200
         ) {
-          // console.log(response.data.result);
+          console.log(chatListResponse.data.result);
           let newChatList = chatListResponse.data.result;
+          newChatList.map(async (chat: IChatListProps) => {
+            const channelId = chat.chatroomChannelId;
+            const alertCounterResponse = await getAlertCounter(channelId);
+            if (alertCounterResponse.status === 200) {
+              const alertCounter = alertCounterResponse.data.result;
+              console.log(alertCounter);
+            }
+          });
 
-          const alertCounterResponse = await getAlertCounter();
-          if (alertCounterResponse.status === 200) {
-            const alertCounterList =
-              alertCounterResponse.data.result.alertChatList;
-
-            newChatList = newChatList.map((chatItem: IChatListProps) => {
-              const alertCounterItem = alertCounterList.find(
-                (alertItem: IAlertProps) =>
-                  alertItem.channelId === chatItem.chatroomChannelId
-              );
-              return alertCounterItem
-                ? { ...chatItem, counter: alertCounterItem.count }
-                : chatItem;
-            });
-          }
+          // if (alertCounterResponse.status === 200) {
+          //   newChatList = newChatList.map((chatItem: IChatListProps) => {
+          //     const alertCounterItem = alertCounterList.find(
+          //       (alertItem: IAlertProps) =>
+          //         alertItem.channelId === chatItem.chatroomChannelId
+          //     );
+          //     return alertCounterItem
+          //       ? { ...chatItem, counter: alertCounterItem.count }
+          //       : chatItem;
+          //   });
+          // }
 
           setIsList(newChatList);
         }
@@ -123,7 +127,7 @@ export default function Chats() {
               recentChat={room.recentChat}
               chatroomChannelId={room.chatroomChannelId}
               profileResponseList={room.profileResponseList}
-              counter={room.counter}
+              // counter={room.counter}
             />
           ))}
         </div>
