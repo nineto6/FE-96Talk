@@ -10,8 +10,10 @@ import Search from "../components/Search";
 import Hood from "../components/Hood";
 import Add from "../components/Add";
 import axios from "axios";
-import { getFriendList } from "../apis/apis";
+import { getFriendList, getTotalAlertCounter } from "../apis/apis";
 import Loading from "../components/Loading";
+import { globalConfig } from "../utils/globals";
+import { useGlobalAlertCounter } from "../utils/notification";
 
 axios.defaults.withCredentials = true;
 // Cookie 를 사용하기 위함
@@ -30,6 +32,8 @@ export default function Main() {
   const [isList, setIsList] = useState<IFriendProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCount, setIsCount] = useState(0);
+  const alertCounter = useGlobalAlertCounter();
+  const [isTotalCount, setIsTotalCount] = useState(useGlobalAlertCounter());
 
   useEffect(() => {
     const getList = async () => {
@@ -47,6 +51,22 @@ export default function Main() {
 
     getList();
   }, []);
+
+  useEffect(() => {
+    const getBubble = async () => {
+      try {
+        const response = await getTotalAlertCounter();
+        // console.log(response);
+        if (response.status === 200 && response.data.status === 200) {
+          setIsTotalCount(response.data.result);
+        }
+      } catch (error) {
+      } finally {
+      }
+    };
+
+    getBubble();
+  }, [alertCounter]);
 
   const onToggleSearch = () => {
     setIsSearch((current) => !current);
@@ -71,7 +91,8 @@ export default function Main() {
           list={isList}
         />
       )}
-      <SideBar />
+
+      <SideBar isTotalCount={isTotalCount} />
       <div className="ml-16 h-full flex w-full flex-col justify-start">
         <TopBar />
         {/* Body */}

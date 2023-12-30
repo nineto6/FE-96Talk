@@ -20,10 +20,13 @@ interface IBubbleProps {
   count: number;
 }
 
-export default function SideBar() {
+interface ISideBarProps {
+  isTotalCount: number;
+}
+
+export default function SideBar({ isTotalCount }: ISideBarProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isAlert, setIsAlert] = useState(!isMobile && Notification.permission);
-  // const [isCounter, setIsCounter] = useState(0);
   const alertCounter = useGlobalAlertCounter();
 
   const nav = useNavigate();
@@ -131,7 +134,13 @@ export default function SideBar() {
       </div>
 
       <div className="relative">
-        {/* <div>{isCounter}</div> */}
+        <div
+          className={`text-slate-50 absolute -top-4 -right-2 text-xs bg-red-400 py-1 px-2 min-w-[12px] min-h-[12px] rounded-full flex flex-col justify-center items-center ${
+            isTotalCount === 0 && "hidden"
+          }`}
+        >
+          <h2>{100 < isTotalCount ? `99+` : isTotalCount}</h2>
+        </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

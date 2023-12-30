@@ -3,7 +3,11 @@ import ChatList from "../components/ChatList";
 import Hood from "../components/Hood";
 import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
-import { getAlertCounter, getChatList } from "../apis/apis";
+import {
+  getAlertCounter,
+  getChatList,
+  getTotalAlertCounter,
+} from "../apis/apis";
 import { IUserProps } from "./User";
 import { globalConfig } from "../utils/globals";
 import { useGlobalAlertCounter } from "../utils/notification";
@@ -29,6 +33,7 @@ export default function Chats() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isList, setIsList] = useState<IChatListProps[]>([]);
   const alertCounter = useGlobalAlertCounter();
+  const [isTotalCount, setIsTotalCount] = useState(useGlobalAlertCounter());
 
   useEffect(() => {
     const getList = async () => {
@@ -74,11 +79,27 @@ export default function Chats() {
     getList();
   }, [alertCounter]);
 
+  useEffect(() => {
+    const getBubble = async () => {
+      try {
+        const response = await getTotalAlertCounter();
+        // console.log(response);
+        if (response.status === 200 && response.data.status === 200) {
+          setIsTotalCount(response.data.result);
+        }
+      } catch (error) {
+      } finally {
+      }
+    };
+
+    getBubble();
+  }, [alertCounter]);
+
   return (
     <div className="flex flex-row">
       <Hood title="채팅 목록" />
       {/* Container */}
-      <SideBar />
+      <SideBar isTotalCount={isTotalCount} />
       <div className="ml-16 h-full flex w-full flex-col justify-start">
         <TopBar />
         {/* Body */}

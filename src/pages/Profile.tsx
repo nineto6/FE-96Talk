@@ -9,9 +9,12 @@ import { useNavigate } from "react-router-dom";
 import {
   getProfileData,
   getProfileImage,
+  getTotalAlertCounter,
   patchProfileData,
 } from "../apis/apis";
 import Loading from "../components/Loading";
+import { globalConfig } from "../utils/globals";
+import { useGlobalAlertCounter } from "../utils/notification";
 
 export interface IProfileProps {
   imageFile: string | null;
@@ -27,6 +30,8 @@ export default function Profile() {
   const [imageName, setImageName] = useState("");
   const [type, setType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const alertCounter = useGlobalAlertCounter();
+  const [isTotalCount, setIsTotalCount] = useState(useGlobalAlertCounter());
 
   const nav = useNavigate();
 
@@ -145,11 +150,27 @@ export default function Profile() {
     getRequest();
   }, []);
 
+  useEffect(() => {
+    const getBubble = async () => {
+      try {
+        const response = await getTotalAlertCounter();
+        // console.log(response);
+        if (response.status === 200 && response.data.status === 200) {
+          setIsTotalCount(response.data.result);
+        }
+      } catch (error) {
+      } finally {
+      }
+    };
+
+    getBubble();
+  }, [alertCounter]);
+
   return (
     <div className="flex flex-row">
       <Hood title="프로필 수정" />
       {/* Container */}
-      <SideBar />
+      <SideBar isTotalCount={isTotalCount} />
       {isLoading && <Loading />}
       <div className="ml-16 h-full flex w-full flex-col justify-start">
         <TopBar />
