@@ -19,6 +19,7 @@
     "postcss-import": "^15.1.0",
     "postcss-preset-env": "^9.3.0",
     "react": "^18.2.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.48.2",

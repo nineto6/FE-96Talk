@@ -1,6 +1,7 @@
 import { Stomp } from "@stomp/stompjs";
 import { globalConfig, stompClient } from "./globals";
 import SockJS from "sockjs-client";
+import { isMobile } from "react-device-detect";
 
 export default function initialStomp(memberNickname: string) {
   const token = globalConfig.isToken;
@@ -20,7 +21,7 @@ export default function initialStomp(memberNickname: string) {
           const { channelId, message, regdate, writerNickname } = JSON.parse(
             response.body
           );
-          if (Notification.permission === "granted") {
+          if (!isMobile && Notification.permission === "granted") {
             new Notification(`${writerNickname}`, {
               body: `${message}`,
             }); // 여기서 body를 사용하여 시스템 알림 생성

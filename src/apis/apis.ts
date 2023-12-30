@@ -219,3 +219,9 @@ export function getAlertCounter(channelId: string) {
 
   return tokenRefresher.get(url);
 }
+
+export function getTotalAlertCounter() {
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/alerts`;
+
+  return tokenRefresher.get(url);
+}

@@ -10,7 +10,6 @@ import User from "./pages/User";
 import { stompClient } from "./utils/globals";
 import { getProfileData } from "./apis/apis";
 import initialStomp from "./utils/initialStomp";
-import { requestNotification } from "./utils/notification";
 
 export default function App() {
   const nav = useNavigate();

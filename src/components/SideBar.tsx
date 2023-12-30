@@ -1,6 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteLogout, getAlertCounter, getChatList } from "../apis/apis";
+import {
+  deleteLogout,
+  getAlertCounter,
+  getChatList,
+  getTotalAlertCounter,
+} from "../apis/apis";
 import Loading from "./Loading";
 import { stompClient } from "../utils/globals";
 import {
@@ -8,6 +13,7 @@ import {
   useGlobalAlertCounter,
 } from "../utils/notification";
 import { IChatListProps } from "../pages/Chats";
+import { isMobile } from "react-device-detect";
 
 interface IBubbleProps {
   channelId: string;
@@ -16,9 +22,9 @@ interface IBubbleProps {
 
 export default function SideBar() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isAlert, setIsAlert] = useState(Notification.permission);
+  const [isAlert, setIsAlert] = useState(!isMobile && Notification.permission);
   // const [isCounter, setIsCounter] = useState(0);
-  // const alertCounter = useGlobalAlertCounter();
+  const alertCounter = useGlobalAlertCounter();
 
   const nav = useNavigate();
   const location = useLocation();
@@ -52,12 +58,14 @@ export default function SideBar() {
   //   getCounter();
   // }, [alertCounter]);
 
-  const onAlert = () => {
-    requestNotification().then((permission) => {
-      console.log(`알림 권한 상태: ${permission}`);
-      setIsAlert(permission);
-    });
-  };
+  // const onAlert = () => {
+  //   if (!isMobile) {
+  //     requestNotification().then((permission) => {
+  //       console.log(`알림 권한 상태: ${permission}`);
+  //       setIsAlert(permission);
+  //     });
+  //   }
+  // };
 
   const onLogout = async () => {
     try {
@@ -90,6 +98,15 @@ export default function SideBar() {
 
     dest === "friend" ? nav("/") : nav(`/${dest}`);
   };
+
+  useEffect(() => {
+    const getTotalCounter = async () => {
+      const response = await getTotalAlertCounter();
+      console.log(response);
+    };
+
+    getTotalCounter();
+  }, [alertCounter]);
 
   return (
     <div className="fixed w-16 h-full min-h-full flex flex-col bg-themePurple text-themeDarkPurple pt-9 justify-start items-center gap-12">

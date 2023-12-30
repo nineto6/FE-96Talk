@@ -4,6 +4,7 @@ export let globalConfig = {
   isToken: null,
   isAlertCounter: 0,
   isAlertChatList: [],
+  isTotalAlert: 0,
 };
 
 export let stompClient = {
