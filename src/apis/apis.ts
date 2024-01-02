@@ -44,6 +44,7 @@ export async function postSignup(data: ISignupProps): Promise<boolean> {
   return tokenRefresher
     .post(url, data)
     .then((response) => {
+      console.log(response.status);
       if (response.data.status === 201) {
         return true;
       } else {
@@ -55,9 +56,9 @@ export async function postSignup(data: ISignupProps): Promise<boolean> {
         console.error("Server Disconnected");
         throw new Error("Server Disconnected");
       } else {
-        console.error("Server Error:", error.response.status);
+        console.error("Server Error:", error?.response?.status ?? "");
+        throw error;
       }
-      throw error;
     });
 }
 

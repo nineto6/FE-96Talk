@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export default function dateFormatter(time: string, setIsTime: Function) {
   const currentTime = new Date();
   const [year, month, day] = time.split("T")[0].split("-").map(Number);

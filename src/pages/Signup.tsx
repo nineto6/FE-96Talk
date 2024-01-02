@@ -49,7 +49,7 @@ export default function Signup() {
         console.error("Signup failed", error);
         if (error instanceof Error) {
           setIsError(true);
-          setIsErrorText(error.message);
+          setIsErrorText("회원가입 형식이 맞지 않습니다.");
         }
       } finally {
         setIsLoading(false);
@@ -90,6 +90,11 @@ export default function Signup() {
             <input
               {...register("memberPwd", {
                 required: "비밀번호를 입력하세요.",
+                pattern: {
+                  value: /^(?=.*[a-z])(?=.*\d)(?=.*[\W_]).+$/,
+                  message:
+                    "비밀번호는 소문자, 특수문자, 숫자를 포함해야 합니다.",
+                },
               })}
               name="memberPwd"
               className="h-10 px-4"
@@ -127,7 +132,7 @@ export default function Signup() {
             onClick={() => {
               nav("/login");
             }}
-            className="hover:text-slate-200 transition-colors cursor-pointer"
+            className="hover:text-slate-200 transition-colors cursor-pointer mt-8"
           >
             로그인
           </h2>
