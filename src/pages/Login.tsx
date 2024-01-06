@@ -51,14 +51,14 @@ export default function Login() {
                 }
               })
               .catch((error: any) => {
-                console.error(error);
-                nav("/login");
+                // console.error(error);
+                nav("/");
               });
           };
 
           connection();
         }
-        nav("/");
+        nav("/main");
         console.log("Login Success");
       }
     } catch (error) {
@@ -66,7 +66,7 @@ export default function Login() {
       if (error instanceof Error) {
         console.log(error);
         setIsError(true);
-        setIsErrorText(error.message);
+        setIsErrorText("로그인 정보가 일치하지 않습니다.");
       }
     } finally {
       setIsLoading(false);

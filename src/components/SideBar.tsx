@@ -91,7 +91,7 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
       }
     } finally {
       setIsLoading(false);
-      nav("/login");
+      nav("/");
     }
   };
 
@@ -99,7 +99,7 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
     // console.log(target.currentTarget.id);
     const dest = target.currentTarget.id;
 
-    dest === "friend" ? nav("/") : nav(`/${dest}`);
+    dest === "friend" ? nav("/main") : nav(`/${dest}`);
   };
 
   useEffect(() => {

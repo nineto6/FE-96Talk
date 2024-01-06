@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Main from "./pages/Main";
 import Login from "./pages/Login";
 import Chats from "./pages/Chats";
@@ -13,8 +13,10 @@ import initialStomp from "./utils/initialStomp";
 
 export default function App() {
   const nav = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
-    if (stompClient.instance === null) {
+    if (stompClient.instance === null && location.pathname !== "/") {
       // console.log("NO");
       const connection = async () => {
         await getProfileData()
@@ -26,8 +28,8 @@ export default function App() {
             }
           })
           .catch((error: any) => {
-            console.error(error);
-            nav("/login");
+            // console.error(error);
+            nav("/");
           });
       };
 
@@ -37,8 +39,8 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path={"/"} element={<Main />} />
-      <Route path={"/login"} element={<Login />} />
+      <Route path={"/"} element={<Login />} />
+      <Route path={"/main"} element={<Main />} />
       <Route path={"/chats"} element={<Chats />} />
       <Route path={"/profile"} element={<Profile />} />
       <Route path={"/signup"} element={<Signup />} />

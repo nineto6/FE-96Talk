@@ -90,7 +90,7 @@ export default function Profile() {
     setIsModify((current) => !current);
     const request = await patchProfileData(formData).then((response) => {
       console.log(response);
-      nav("/");
+      nav("/main");
     });
   };
 
@@ -140,7 +140,7 @@ export default function Profile() {
         }
       } catch (error) {
         console.error("Error in getRequest:", error);
-        nav("/login");
+        nav("/");
         // 다시 로그인하게 유도
       } finally {
         setIsLoading(false);

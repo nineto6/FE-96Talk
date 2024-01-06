@@ -58,7 +58,7 @@ export default function MyProfile() {
         }
       } catch (error) {
         console.error("Error in getRequest:", error);
-        nav("/login");
+        nav("/");
         // 다시 로그인하게 유도
       } finally {
         setIsLoading(false);

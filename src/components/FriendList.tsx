@@ -16,7 +16,7 @@ export default function FriendList({
   const [isLoading, setIsLoading] = useState(false);
 
   const onMove = () => {
-    nav(`user/${memberNickname}`);
+    nav(`/user/${memberNickname}`);
   };
 
   useEffect(() => {

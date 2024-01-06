@@ -43,7 +43,7 @@ export default function Signup() {
         if (success) {
           // 성공했을 시
           console.log("Singup Success");
-          nav("/login");
+          nav("/");
         }
       } catch (error) {
         console.error("Signup failed", error);
@@ -130,7 +130,7 @@ export default function Signup() {
         <div>
           <h2
             onClick={() => {
-              nav("/login");
+              nav("/");
             }}
             className="hover:text-slate-200 transition-colors cursor-pointer mt-8"
           >
