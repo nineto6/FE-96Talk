@@ -62,7 +62,9 @@ export default function Signup() {
       <Hood title="회원가입" />
       <TopBar />
       {isLoading && <Loading />}
-      {isError && <Messenger text={isErrorText} setIsError={setIsError} />}
+      {isError && (
+        <Messenger text={isErrorText} setIsError={setIsError} isShake={true} />
+      )}
       <div className="flex flex-col h-full justify-center items-center">
         {/* Logo */}
 

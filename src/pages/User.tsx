@@ -162,7 +162,13 @@ export default function User() {
         <Loading />
       ) : (
         <>
-          {isError && <Messenger text={isErrorText} setIsError={setIsError} />}
+          {isError && (
+            <Messenger
+              text={isErrorText}
+              setIsError={setIsError}
+              isShake={false}
+            />
+          )}
           <Hood title={`${isData.memberNickname}님의 프로필`} />
           <div className="bg-white flex flex-col justify-start h-screen">
             <TopBar />

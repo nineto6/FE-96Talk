@@ -254,10 +254,16 @@ export default function Chat() {
   return (
     <div className="min-h-screen flex w-full flex-col justify-start">
       {isLoading && <Loading />}
-      {isError && <Messenger text={isErrorText} setIsError={setIsError} />}
+      {isError && (
+        <Messenger text={isErrorText} setIsError={setIsError} isShake={true} />
+      )}
       {isTab && <SideTabBar setIsTab={setIsTab} deleteChatRoom={deleteRoom} />}
       {isMessage && (
-        <Messenger text={isMessageText} setIsError={setIsMessage} />
+        <Messenger
+          text={isMessageText}
+          setIsError={setIsMessage}
+          isShake={true}
+        />
       )}
       <Hood
         title={`${isPartner.map(

@@ -1,13 +1,20 @@
 interface IMessengerProps {
   text: string;
   setIsError: Function;
+  isShake: boolean;
 }
 
-export default function Messenger({ text, setIsError }: IMessengerProps) {
+export default function Messenger({
+  text,
+  setIsError,
+  isShake,
+}: IMessengerProps) {
   return (
     <div className="bg-slate-500 bg-opacity-25 h-full w-full z-50 fixed flex flex-col justify-center items-center">
       <div
-        className={`animate-bounce-up min-h-[40vh] rounded-md shadow-xl flex flex-col justify-start items-center md:w-1/3 w-2/3 h-auto p-8 bg-white opacity-none`}
+        className={`${
+          isShake && "animate-shake"
+        } min-h-[40vh] rounded-md shadow-xl flex flex-col justify-start items-center md:w-1/3 w-2/3 h-auto p-8 bg-white opacity-none`}
       >
         <div className="flex flex-row items-center w-full justify-end mb-4">
           <svg

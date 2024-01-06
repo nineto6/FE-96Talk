@@ -79,7 +79,9 @@ export default function Login() {
     <div className="w-screen h-screen flex-col justify-start bg-themePurple">
       <Hood title="로그인" />
       {isLoading && <Loading />}
-      {isError && <Messenger text={isErrorText} setIsError={setIsError} />}
+      {isError && (
+        <Messenger text={isErrorText} setIsError={setIsError} isShake={true} />
+      )}
       <TopBar isDark={true} />
       {/* Main */}
       <div className="flex flex-col justify-start mt-12 items-center">
