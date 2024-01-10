@@ -2,18 +2,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   deleteLogout,
-  getAlertCounter,
-  getChatList,
-  getTotalAlertCounter,
+  getTotalAlertCounter
 } from "../apis/apis";
 import Loading from "./Loading";
 import { stompClient } from "../utils/globals";
 import {
-  requestNotification,
-  useGlobalAlertCounter,
+  useGlobalAlertCounter
 } from "../utils/notification";
-import { IChatListProps } from "../pages/Chats";
 import { isMobile } from "react-device-detect";
+import tokenRefresher from "../apis/refresh";
 
 interface IBubbleProps {
   channelId: string;
@@ -37,39 +34,6 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
     setIsState(location.pathname.split("/")[1]);
   }, [location]);
 
-  // useEffect(() => {
-  //   const getCounter = async () => {
-  //     try {
-  //       const alertCounterResponse = await getAlertCounter();
-  //       if (alertCounterResponse.status === 200) {
-  //         const alertCounterList =
-  //           alertCounterResponse.data.result.alertChatList;
-  //         let total = 0;
-  //         alertCounterList.map((chat: IBubbleProps) => {
-  //           // setIsCounter();
-  //           total += chat.count;
-  //         });
-
-  //         setIsCounter(total);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     } finally {
-  //     }
-  //   };
-
-  //   getCounter();
-  // }, [alertCounter]);
-
-  // const onAlert = () => {
-  //   if (!isMobile) {
-  //     requestNotification().then((permission) => {
-  //       console.log(`알림 권한 상태: ${permission}`);
-  //       setIsAlert(permission);
-  //     });
-  //   }
-  // };
-
   const onLogout = async () => {
     try {
       setIsLoading(true);
@@ -83,6 +47,9 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
         stompClient.instance?.disconnect();
         stompClient.instance = null;
         stompClient.isConnect = false;
+        
+        // JWT 토큰 제거
+        delete tokenRefresher.defaults.headers.common['Authorization']
       }
     } catch (error) {
       // console.error(error);

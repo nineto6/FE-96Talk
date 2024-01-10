@@ -95,7 +95,7 @@ export default function Chat() {
   const connectHandler = async () => {
     const token = globalConfig.isToken;
 
-    if (stompClient.instance !== null) {
+    if (stompClient.instance !== null && stompClient.isConnect) {
       stompClient.instance?.subscribe(
         `/sub/chat/${chatroomChannelId}`,
         (body) => {
@@ -212,20 +212,22 @@ export default function Chat() {
 
     connection();
 
-    const handleBeforeUnload = () => {
-      if (stompClient.instance) {
-        stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
-      }
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      if (stompClient.instance) {
-        stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
-      }
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+    if(stompClient.isConnect) {
+      const handleBeforeUnload = () => {
+        if (stompClient.instance) {
+          stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
+        }
+      };
+      window.addEventListener("beforeunload", handleBeforeUnload);
+  
+      return () => {
+        if (stompClient.instance) {
+          stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
+        }
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, [stompClient.isConnect]);
 
   // useEffect(() => {
   //   const handleBeforeUnload = () => {

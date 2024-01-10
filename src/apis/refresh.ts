@@ -1,17 +1,51 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 import { globalConfig } from "../utils/globals";
+import initialStomp from "../utils/initialStomp";
+import { getProfileData } from "./apis";
 
-////////////////////////////////////////////////////
-//
-//    TOKEN REFRESHER
-//
-////////////////////////////////////////////////////
+export const refreshToken = async function(callback:any) {
+  await axios.put(`${process.env.REACT_APP_BASE_URL}api/auth`)
+    .then(response => {
+      const JWT_EXPIRE_TIME = 1800 * 1000; // 만료 시간 30분 (밀리 초로 표현)
+      const accessToken = response.data.result["AT"];
+      tokenRefresher.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      globalConfig.isToken = accessToken;
+      console.log("res.data.accessToken : " + accessToken);
 
-export async function getAccessToken() {
-  const url = `${process.env.REACT_APP_BASE_URL}api/auth`;
+      if(callback){
+        // 최초 App 렌더시에 적용
+        // 이후 setTimeOut 으로 재발급시 적용 X 
+        const connection = async () => {
+          await getProfileData()
+            .then((response: any) => {
+              if (response.status === 200 && response.data?.status === 200) {
+                const { memberNickname } = response.data.result;
+                initialStomp(memberNickname);
 
-  return axios.put(url);
+                callback(true);
+              }
+            })
+            .catch((error: any) => {
+              console.error("Do not Websocket" + error);
+
+              callback(false);
+            });
+        }
+
+        connection();
+      }
+
+      setTimeout(function(){ refreshToken(null); }, JWT_EXPIRE_TIME - 60000); // 만료 시간 1분 전에 재발급
+    })
+    .catch(error => {
+        console.log("app silent requset fail : " + error);
+        if(callback){
+            callback(false);
+        }
+    })
+    .finally(() => {
+      console.log("refresh token request end");
+    });
 }
 
 const tokenRefresher = axios.create({
@@ -37,33 +71,12 @@ tokenRefresher.interceptors.response.use(
     return response;
   },
   async function (error) {
-    const originalRequest = error.config;
+    console.log("Response Error");
 
-    // 요청 실패한 configuration 저장
-    // console.log(error);
-    // error.response.status (FUNCTION CHANGE)
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const retry = await getAccessToken();
-
-        const newAccessToken = retry.data.result["AT"];
-        tokenRefresher.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${newAccessToken}`;
-        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-
-        globalConfig.isToken = newAccessToken;
-
-        console.log("Refresh Success");
-
-        return axios(originalRequest);
-      } catch (refreshError) {
-        return Promise.reject(refreshError);
-      }
+    // 401 에러 발생 시 "/" 이동
+    if(error.response.status === 401) {
+      window.location.href = "/";
     }
-
     return Promise.reject(error);
   }
 );

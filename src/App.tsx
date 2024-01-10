@@ -7,45 +7,49 @@ import Profile from "./pages/Profile";
 import Chat from "./pages/Chat";
 import Signup from "./pages/Signup";
 import User from "./pages/User";
-import { stompClient } from "./utils/globals";
-import { getProfileData } from "./apis/apis";
-import initialStomp from "./utils/initialStomp";
+import { refreshToken } from "./apis/refresh";
+import Loading from "./components/Loading";
 
 export default function App() {
   const nav = useNavigate();
   const location = useLocation();
+  const [isLogin, setIsLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (stompClient.instance === null && location.pathname !== "/") {
-      // console.log("NO");
-      const connection = async () => {
-        await getProfileData()
-          .then((response: any) => {
-            if (response.status === 200 && response.data?.status === 200) {
-              const { memberNickname } = response.data.result;
-              // console.log(memberNickname);
-              initialStomp(memberNickname);
-            }
-          })
-          .catch((error: any) => {
-            // console.error(error);
-            nav("/");
-          });
-      };
-
-      connection();
+    try {
+      refreshToken(loginCallBack);
+    } catch(error) {
+      console.log(error);
     }
   }, []);
 
-  return (
-    <Routes>
-      <Route path={"/"} element={<Login />} />
-      <Route path={"/main"} element={<Main />} />
-      <Route path={"/chats"} element={<Chats />} />
-      <Route path={"/profile"} element={<Profile />} />
-      <Route path={"/signup"} element={<Signup />} />
-      <Route path={"/chats/:chatroomChannelId"} element={<Chat />} />
-      <Route path={"/user/:userNumber"} element={<User />} />
-    </Routes>
-  );
+  function loginCallBack(login:boolean) {
+    setIsLogin(login);
+    setLoading(true);
+  }
+
+  if(loading) {
+
+    if(isLogin && location.pathname === "/") {
+      nav("/main");
+    }
+    
+    return (
+      <Routes>
+        <Route path={"/"} element={<Login />} />
+        <Route path={"/main"} element={<Main />} />
+        <Route path={"/chats"} element={<Chats />} />
+        <Route path={"/profile"} element={<Profile />} />
+        <Route path={"/signup"} element={<Signup />} />
+        <Route path={"/chats/:chatroomChannelId"} element={<Chat />} />
+        <Route path={"/user/:userNumber"} element={<User />} />
+      </Routes>
+    );
+  } else {
+    // 로딩 렌더
+    return (
+      <Loading/>
+    )
+  }
 }
