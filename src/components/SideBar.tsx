@@ -70,12 +70,6 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
     getTotalCounter();
   }, [alertCounter]);
 
-  useEffect(() => {
-    if (isTotalCount !== counter) {
-      setCounter(isTotalCount);
-    }
-  }, [isTotalCount, counter]);
-
   const onMove = (target: React.MouseEvent<SVGElement>) => {
     // console.log(target.currentTarget.id);
     const dest = target.currentTarget.id;
