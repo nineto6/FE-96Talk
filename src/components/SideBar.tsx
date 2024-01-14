@@ -1,14 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  deleteLogout,
-  getTotalAlertCounter
-} from "../apis/apis";
+import { deleteLogout, getTotalAlertCounter } from "../apis/apis";
 import Loading from "./Loading";
 import { stompClient } from "../utils/globals";
-import {
-  useGlobalAlertCounter
-} from "../utils/notification";
+import { useGlobalAlertCounter } from "../utils/notification";
 import { isMobile } from "react-device-detect";
 import tokenRefresher from "../apis/refresh";
 
@@ -25,6 +20,7 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isAlert, setIsAlert] = useState(!isMobile && Notification.permission);
   const alertCounter = useGlobalAlertCounter();
+  const [counter, setCounter] = useState(isTotalCount);
 
   const nav = useNavigate();
   const location = useLocation();
@@ -47,9 +43,9 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
         stompClient.instance?.disconnect();
         stompClient.instance = null;
         stompClient.isConnect = false;
-        
+
         // JWT 토큰 제거
-        delete tokenRefresher.defaults.headers.common['Authorization']
+        delete tokenRefresher.defaults.headers.common["Authorization"];
       }
     } catch (error) {
       // console.error(error);
@@ -62,21 +58,30 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
     }
   };
 
+  useEffect(() => {
+    const getTotalCounter = async () => {
+      const response = await getTotalAlertCounter();
+      console.log(response);
+      if (response?.status === 200 && response?.data?.status === 200) {
+        setCounter(response.data.result);
+      }
+    };
+
+    getTotalCounter();
+  }, [alertCounter]);
+
+  useEffect(() => {
+    if (isTotalCount !== counter) {
+      setCounter(isTotalCount);
+    }
+  }, [isTotalCount, counter]);
+
   const onMove = (target: React.MouseEvent<SVGElement>) => {
     // console.log(target.currentTarget.id);
     const dest = target.currentTarget.id;
 
     dest === "friend" ? nav("/main") : nav(`/${dest}`);
   };
-
-  useEffect(() => {
-    const getTotalCounter = async () => {
-      const response = await getTotalAlertCounter();
-      console.log(response);
-    };
-
-    getTotalCounter();
-  }, [alertCounter]);
 
   return (
     <div className="fixed w-16 h-full min-h-full flex flex-col bg-themePurple text-themeDarkPurple pt-9 justify-start items-center gap-12">
@@ -103,10 +108,10 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
       <div className="relative">
         <div
           className={`text-slate-50 absolute -top-4 -right-2 text-xs bg-red-400 py-1 px-2 min-w-[12px] min-h-[12px] rounded-full flex flex-col justify-center items-center ${
-            isTotalCount === 0 && "hidden"
+            counter === 0 && "hidden"
           }`}
         >
-          <h2>{100 < isTotalCount ? `99+` : isTotalCount}</h2>
+          <h2>{100 < counter ? `99+` : counter}</h2>
         </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -32,8 +32,8 @@ export interface IAlertProps {
 export default function Chats() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isList, setIsList] = useState<IChatListProps[]>([]);
-  const alertCounter = useGlobalAlertCounter();
   const [isTotalCount, setIsTotalCount] = useState(useGlobalAlertCounter());
+  const alertCounter = useGlobalAlertCounter();
 
   useEffect(() => {
     const getList = async () => {
@@ -43,8 +43,8 @@ export default function Chats() {
           chatListResponse.status === 200 &&
           chatListResponse.data?.status === 200
         ) {
-          console.log(chatListResponse.data.result);
           let newChatList = chatListResponse.data.result;
+          console.log(newChatList);
           newChatList.map(async (chat: IChatListProps) => {
             const channelId = chat.chatroomChannelId;
             const alertCounterResponse = await getAlertCounter(channelId);
@@ -53,18 +53,6 @@ export default function Chats() {
               console.log(alertCounter);
             }
           });
-
-          // if (alertCounterResponse.status === 200) {
-          //   newChatList = newChatList.map((chatItem: IChatListProps) => {
-          //     const alertCounterItem = alertCounterList.find(
-          //       (alertItem: IAlertProps) =>
-          //         alertItem.channelId === chatItem.chatroomChannelId
-          //     );
-          //     return alertCounterItem
-          //       ? { ...chatItem, counter: alertCounterItem.count }
-          //       : chatItem;
-          //   });
-          // }
 
           setIsList(newChatList);
         }
@@ -86,6 +74,14 @@ export default function Chats() {
         // console.log(response);
         if (response.status === 200 && response.data.status === 200) {
           setIsTotalCount(response.data.result);
+
+          const chatListResponse = await getChatList();
+          if (
+            chatListResponse.status === 200 &&
+            chatListResponse.data?.status === 200
+          ) {
+            setIsList(chatListResponse.data.result);
+          }
         }
       } catch (error) {
       } finally {

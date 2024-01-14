@@ -14,27 +14,26 @@ export default function App() {
   const nav = useNavigate();
   const location = useLocation();
   const [isLogin, setIsLogin] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     try {
       refreshToken(loginCallBack);
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }, []);
 
-  function loginCallBack(login:boolean) {
+  const loginCallBack = (login: boolean) => {
     setIsLogin(login);
-    setLoading(true);
-  }
+    setIsLoading(true);
+  };
 
-  if(loading) {
-
-    if(isLogin && location.pathname === "/") {
+  if (isLoading) {
+    if (isLogin && location.pathname === "/") {
       nav("/main");
     }
-    
+
     return (
       <Routes>
         <Route path={"/"} element={<Login />} />
@@ -48,8 +47,6 @@ export default function App() {
     );
   } else {
     // 로딩 렌더
-    return (
-      <Loading/>
-    )
+    return <Loading />;
   }
 }
