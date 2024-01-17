@@ -86,7 +86,7 @@ export default function SideBar({ isTotalCount }: ISideBarProps) {
           viewBox="0 0 24 24"
           fill="currentColor"
           className={`w-6 h-6 cursor-pointer hover:text-white transition-colors ${
-            isState === "" ? "text-white" : ""
+            isState === "main" ? "text-white" : ""
           }`}
           id="friend"
           onClick={onMove}
