@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IFriendProps } from "../pages/Main";
 import { useNavigate } from "react-router-dom";
+import SearchProfile from "./SearchProfile";
 
 interface ISearchDataProps {
   searchData: string;
@@ -37,6 +38,7 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log(list);
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         setIsVisible(true);
@@ -108,21 +110,13 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
             list
               .filter((friend) => friend.memberNickname.includes(findList))
               .map((friend, index) => (
-                <div
-                  onClick={() => {
-                    nav(`user/${friend.memberNickname}`);
-                  }}
+                <SearchProfile
                   key={index}
-                  className="hover:bg-slate-50 cursor-pointer w-full flex flex-row justify-start items-center gap-12 py-2 border-b-2 last:border-none border-dashed"
-                >
-                  <div
-                    style={{
-                      backgroundImage: `${friend.imageName}`,
-                    }}
-                    className="w-16 h-16 rounded-3xl bg-purple-200"
-                  />
-                  <h3>{friend.memberNickname}</h3>
-                </div>
+                  memberNickname={friend.memberNickname}
+                  imageName={friend.imageName}
+                  type={friend.type}
+                  canAdd={true}
+                />
               ))
               .slice(0, 5)
             //   5개만 출력

@@ -86,7 +86,7 @@ export default function Main() {
       )}
       {isAdd && (
         <Add
-          title="아이디로 친구 추가"
+          title="닉네임으로 친구 추가"
           onToggleAdd={onToggleAdd}
           list={isList}
         />

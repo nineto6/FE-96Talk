@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { getProfileImage } from "../apis/apis";
+import { useNavigate } from "react-router-dom";
 
 interface ISearchProfileProps {
   memberNickname: string;
   imageName: string | null;
-  onAddFriend: any;
+  onAddFriend?: any;
   type: string | null;
   canAdd: boolean;
 }
@@ -17,6 +18,11 @@ export default function SearchProfile({
   canAdd,
 }: ISearchProfileProps) {
   const [isImage, setIsImage] = useState<string>("");
+  const nav = useNavigate();
+
+  const onMove = () => {
+    nav(`/user/${memberNickname}`);
+  };
 
   useEffect(() => {
     const getImage = async () => {
@@ -40,7 +46,10 @@ export default function SearchProfile({
   }, []);
 
   return (
-    <div className=" hover:bg-slate-50 cursor-pointer w-full flex flex-row justify-between items-center gap-12 py-2 border-b-2 last:border-none border-dashed">
+    <div
+      onClick={onMove}
+      className=" hover:bg-slate-50 cursor-pointer w-full flex flex-row justify-between items-center gap-12 py-2 border-b-2 last:border-none border-dashed"
+    >
       <div className="flex flex-row justify-start gap-12 items-center">
         <div
           style={{

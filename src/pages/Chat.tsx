@@ -212,14 +212,14 @@ export default function Chat() {
 
     connection();
 
-    if(stompClient.isConnect) {
+    if (stompClient.isConnect) {
       const handleBeforeUnload = () => {
         if (stompClient.instance) {
           stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
         }
       };
       window.addEventListener("beforeunload", handleBeforeUnload);
-  
+
       return () => {
         if (stompClient.instance) {
           stompClient.instance.unsubscribe(`/sub/chat/${chatroomChannelId}`);
