@@ -216,7 +216,7 @@ export function getFindFriend(channelId: string) {
 }
 
 export function getAlertCounter(channelId: string) {
-  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/${channelId}/alerts`;
+  const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/alerts/${channelId}`;
 
   return tokenRefresher.get(url);
 }
