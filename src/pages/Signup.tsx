@@ -3,7 +3,11 @@ import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Hood from "../components/Hood";
-import { postSignup } from "../apis/apis";
+import {
+  getDuplicateEmail,
+  getDuplicateNickname,
+  postSignup,
+} from "../apis/apis";
 import { useState } from "react";
 import Loading from "../components/Loading";
 import Messenger from "../components/Messenger";
@@ -26,7 +30,57 @@ export default function Signup() {
     handleSubmit,
     formState: { errors },
     setError,
+    getValues,
+    clearErrors,
+    trigger,
   } = useForm<ISignupProps>();
+
+  const [isLoginMessage, setIsLoginMessage] = useState<string>("");
+  const [isNicknameMessage, setIsNicknameMessage] = useState<string>("");
+
+  const onDuplicateEmailCheck = async () => {
+    const target = getValues("memberEmail");
+    const isValid = await trigger("memberEmail");
+    if (isValid) {
+      // 유효성 검사를 통과했을 경우
+      try {
+        const response = await getDuplicateEmail(target);
+        if (response?.status === 200 && response?.data?.status === 200) {
+          // 사용가능 한 메일일 경우
+          setIsLoginMessage("사용가능한 이메일 입니다.");
+          clearErrors("memberEmail");
+        }
+      } catch (error) {
+        setIsLoginMessage("중복된 이메일 입니다.");
+        setError("memberEmail", { message: "회원가입 조건이 맞지않습니다." });
+      }
+    } else {
+      console.log("WRONG");
+    }
+  };
+
+  const onDuplicateNicknameCheck = async () => {
+    const target = getValues("memberNickname");
+    const isValid = await trigger("memberNickname");
+    if (isValid) {
+      // 유효성 검사를 통과했을 경우
+      try {
+        const response = await getDuplicateNickname(target);
+        if (response?.status === 200 && response?.data?.status === 200) {
+          // 사용가능 한 메일일 경우
+          setIsNicknameMessage("사용가능한 닉네임 입니다.");
+          clearErrors("memberNickname");
+        }
+      } catch (error) {
+        setIsNicknameMessage("중복된 닉네임 입니다.");
+        setError("memberNickname", {
+          message: "회원가입 조건이 맞지않습니다.",
+        });
+      }
+    } else {
+      console.log("WRONG");
+    }
+  };
 
   const onValid = async (data: ISignupProps) => {
     // console.log(data);
@@ -71,24 +125,54 @@ export default function Signup() {
         <div className="flex flex-col h-auto w-1/2 md:w-1/3">
           <form
             onSubmit={handleSubmit(onValid)}
-            className="flex flex-col w-full gap-4"
+            className="flex flex-col w-full gap-8"
           >
-            <input
-              {...register("memberEmail", {
-                required: "아이디를 입력하세요.",
-              })}
-              name="memberEmail"
-              className="h-10 px-4"
-              placeholder="아이디"
-            />
-            <input
-              {...register("memberNickname", {
-                required: "닉네임을 입력하세요.",
-              })}
-              name="memberNickname"
-              className="h-10 px-4"
-              placeholder="닉네임"
-            />
+            <div className="flex flex-row gap-2 relative">
+              <input
+                {...register("memberEmail", {
+                  required: "이메일을 입력하세요.",
+                  pattern: {
+                    value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+                    message: "유효한 이메일 주소를 입력하세요.",
+                  },
+                })}
+                name="memberEmail"
+                className="h-10 px-4 w-3/4"
+                placeholder="이메일"
+              />
+              <div
+                onClick={onDuplicateEmailCheck}
+                className="cursor-pointer flex justify-center items-center w-1/4 bg-themeDarkPurple text-white"
+              >
+                중복확인
+              </div>
+              <h2 className="text-white absolute left-0 -bottom-6 text-sm">
+                {isLoginMessage}
+              </h2>
+            </div>
+            <div className="flex flex-row gap-2 relative">
+              <input
+                {...register("memberNickname", {
+                  required: "닉네임을 입력하세요.",
+                  pattern: {
+                    value: /^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$/,
+                    message: "닉네임은 최소 2자리, 최대 10자리입니다.",
+                  },
+                })}
+                name="memberNickname"
+                className="h-10 px-4 w-3/4"
+                placeholder="닉네임"
+              />
+              <div
+                onClick={onDuplicateNicknameCheck}
+                className="cursor-pointer flex justify-center items-center w-1/4 bg-themeDarkPurple text-white"
+              >
+                중복확인
+              </div>
+              <h2 className="text-white absolute left-0 -bottom-6 text-sm">
+                {isNicknameMessage}
+              </h2>
+            </div>
             <input
               {...register("memberPwd", {
                 required: "비밀번호를 입력하세요.",
@@ -120,10 +204,10 @@ export default function Signup() {
           <h2 className="text-center mt-2 text-themeYellow">
             {errors.memberEmail
               ? errors.memberEmail.message
-              : errors.memberPwd
-              ? errors.memberPwd.message
               : errors.memberNickname
               ? errors.memberNickname.message
+              : errors.memberPwd
+              ? errors.memberPwd.message
               : errors.memberPwdCheck
               ? errors.memberPwdCheck.message
               : ""}

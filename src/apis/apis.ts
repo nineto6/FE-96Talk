@@ -1,4 +1,5 @@
 // import axios from "axios";
+import axios from "axios";
 import { IAddDataProps } from "../components/Add";
 import { ILoginProps } from "../pages/Login";
 import { ISignupProps } from "../pages/Signup";
@@ -225,4 +226,32 @@ export function getTotalAlertCounter() {
   const url = `${process.env.REACT_APP_BASE_URL}api/chatroom/alerts`;
 
   return tokenRefresher.get(url);
+}
+
+/**
+ *
+ * @returns axios instance 로 리턴
+ */
+export function getDuplicateEmail(memberEmail: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/members/check-email`;
+
+  return axios.get(url, {
+    params: {
+      memberEmail,
+    },
+  });
+}
+
+/**
+ *
+ * @returns axios instance 로 리턴
+ */
+export function getDuplicateNickname(memberNickname: string) {
+  const url = `${process.env.REACT_APP_BASE_URL}api/members/check-nickname`;
+
+  return axios.get(url, {
+    params: {
+      memberNickname,
+    },
+  });
 }
