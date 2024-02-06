@@ -4,6 +4,16 @@ import { IFriendProps } from "../pages/Main";
 import { getProfileImage } from "../apis/apis";
 import Loading from "./Loading";
 
+/**
+ * 친구 목록에서 친구의 프로필 정보를 간략하게 가져오는 component
+ *
+ * @param imageName 친구의 프로필 이미지
+ * @param memberNickname 친구의 닉네임
+ * @param profileStateMessage 친구의 프로필 메세지
+ * @param music 친구의 프로필 음악 (ver2. 에서 구현 예정)
+ * @param type 프로필 이미지의 타입
+ * @returns
+ */
 export default function FriendList({
   imageName,
   memberNickname,

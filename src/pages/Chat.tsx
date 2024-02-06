@@ -1,19 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom";
-import TopBar from "../components/TopBar";
 import Bubble from "../components/Bubble";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import Hood from "../components/Hood";
-import { Client, CompatClient, Stomp } from "@stomp/stompjs";
 import { globalConfig, stompClient } from "../utils/globals";
-import SockJS from "sockjs-client";
 import {
   deleteChatRoom,
   getChatList,
   getChatroomLog,
   getFindFriend,
   getProfileData,
-  getProfileImage,
   postAddFriend,
 } from "../apis/apis";
 import { IUserProps } from "./User";
@@ -22,7 +18,6 @@ import Loading from "../components/Loading";
 import SideTabBar from "../components/SideTabBar";
 import Warning from "../components/Warning";
 import Messenger from "../components/Messenger";
-import initialStomp from "../utils/initialStomp";
 
 interface IChatProps {
   channelId: string;
@@ -36,8 +31,13 @@ interface IChatroomProps {
   profileResponseList: IUserProps[];
 }
 
-interface IMessageProps {}
-
+/**
+ * 채팅방 페이지
+ *
+ * 채팅방에 첫 진입 시 는 구독 X
+ * 채팅방에서 나올 때 구독취소 O
+ * @returns
+ */
 export default function Chat() {
   const [isName, setIsName] = useState<string>("");
   const [isChat, setIsChat] = useState<IChatProps[]>([]);
@@ -60,8 +60,6 @@ export default function Chat() {
   const [isErrorText, setIsErrorText] = useState("");
   const [isMessage, setIsMessage] = useState(false);
   const [isMessageText, setIsMessageText] = useState("");
-
-  let client = useRef<CompatClient>();
 
   const onValid = (data: { message: string }) => {
     publish(data.message);
@@ -99,7 +97,6 @@ export default function Chat() {
       stompClient.instance?.subscribe(
         `/sub/chat/${chatroomChannelId}`,
         (body) => {
-          // console.log(JSON.parse(body.body));
           setIsChat((current) => {
             return [...current, JSON.parse(body.body)];
           });
@@ -113,6 +110,10 @@ export default function Chat() {
     }
   };
 
+  /**
+   * 메세지를 생성하기 위한 함수
+   * @param chat 새로 생성할 chat
+   */
   const publish = (chat: string) => {
     const token = globalConfig.isToken;
 
@@ -228,22 +229,6 @@ export default function Chat() {
       };
     }
   }, [stompClient.isConnect]);
-
-  // useEffect(() => {
-  //   const handleBeforeUnload = () => {
-  //     if (client.current) {
-  //       client.current.disconnect(() => {
-  //         console.log("Disconnected from server");
-  //       });
-  //     }
-  //   };
-
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (chatRef.current) {

@@ -4,6 +4,14 @@ interface IWarningProps {
   addFriend: Function;
 }
 
+/**
+ * 채팅방 내 경고 component
+ *
+ * 친구로 등록되지 않은 사용자 일 시 경고문구를 출력
+ *
+ * @param addFriend 친구 추가 함수
+ * @returns
+ */
 export default function Warning({ addFriend }: IWarningProps) {
   const [isSpread, setIsSpread] = useState(false);
 

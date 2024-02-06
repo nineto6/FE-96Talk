@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import SideBar from "../components/SideBar";
-import { useNavigate } from "react-router-dom";
 import FriendList from "../components/FriendList";
-import { useRecoilState } from "recoil";
 import TopBar from "../components/TopBar";
-// import { friends } from "../jsons/dummy";
 import MyProfile from "../components/MyProfile";
 import Search from "../components/Search";
 import Hood from "../components/Hood";
@@ -12,7 +9,6 @@ import Add from "../components/Add";
 import axios from "axios";
 import { getFriendList, getTotalAlertCounter } from "../apis/apis";
 import Loading from "../components/Loading";
-import { globalConfig } from "../utils/globals";
 import { useGlobalAlertCounter } from "../utils/notification";
 
 axios.defaults.withCredentials = true;
@@ -26,6 +22,15 @@ export interface IFriendProps {
   type: string | null;
 }
 
+/**
+ * 친구 목록 페이지
+ *
+ * 첫 진입 시 모든 대화방에 구독
+ *
+ * page-url 은 /main
+ *
+ * @returns
+ */
 export default function Main() {
   const [isSearch, setIsSearch] = useState(false);
   const [isAdd, setIsAdd] = useState(false);

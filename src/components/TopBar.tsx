@@ -4,6 +4,14 @@ interface ITopBarProps {
   isDark?: boolean;
 }
 
+/**
+ * 최상단 바 component
+ *
+ * ver2. 에서 다크모드 구현 예정
+ *
+ * @param isDark 다크모드 인지 확인하는 boolean 타입 변수
+ * @returns
+ */
 export default function TopBar({ isDark }: ITopBarProps) {
   const nav = useNavigate();
   const onBack = () => {

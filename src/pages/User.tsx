@@ -1,11 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import SideBar from "../components/SideBar";
 import Hood from "../components/Hood";
 import TopBar from "../components/TopBar";
 import { useEffect, useState } from "react";
 import {
   deleteFriend,
-  getChatList,
   getFriendList,
   getProfileImage,
   getUserProfileData,
@@ -22,6 +20,10 @@ export interface IUserProps {
   type: string | null;
 }
 
+/**
+ * 특정 유저의 프로필 정보를 볼 수 있는 페이지
+ * @returns
+ */
 export default function User() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isImage, setIsImage] = useState<string>("");

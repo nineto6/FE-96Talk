@@ -1,6 +1,14 @@
 import { dotPulse } from "ldrs";
+
+/**
+ * 로딩 중 animation
+ */
 dotPulse.register();
 
+/**
+ * 로딩 화면 component
+ * @returns
+ */
 export default function Loading() {
   return (
     <div

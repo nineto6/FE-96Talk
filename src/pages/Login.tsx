@@ -1,14 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
-import { error } from "console";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
-import { useRecoilState } from "recoil";
-import axios from "axios";
 import Hood from "../components/Hood";
 import { getProfileData, postLogin } from "../apis/apis";
-import Cookies from "js-cookie";
 import Messenger from "../components/Messenger";
 import { stompClient } from "../utils/globals";
 import initialStomp from "../utils/initialStomp";
@@ -18,12 +14,16 @@ export interface ILoginProps {
   memberPwd: string;
 }
 
+/**
+ * 로그인 페이지
+ *
+ * page-url 은 /, /login 이 아니므로 유의
+ * @returns
+ */
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isErrorText, setIsErrorText] = useState("");
-
-  // 에러 발생 여부
 
   const nav = useNavigate();
   const {

@@ -3,15 +3,20 @@ import { IChatListProps } from "../pages/Chats";
 import { useEffect, useState } from "react";
 import { getAlertCounter, getProfileImage } from "../apis/apis";
 import dateFormatter from "../utils/formatter";
-import { globalConfig } from "../utils/globals";
 import { useGlobalAlertCounter } from "../utils/notification";
 
+/**
+ *
+ * @param chatroomChannelId 채팅방 고유 아이디
+ * @param profileResponseList 프로필 정보
+ * @param recentChat 가장 최근 채팅내역
+ * @returns
+ */
 export default function FriendList({
   chatroomChannelId,
   profileResponseList,
   recentChat,
-}: // counter,
-IChatListProps) {
+}: IChatListProps) {
   const nav = useNavigate();
   const [isImage, setIsImage] = useState<string>("");
   const [isTime, setIsTime] = useState<string>("");
@@ -44,6 +49,11 @@ IChatListProps) {
       }
     };
 
+    /**
+     * 알람 수를 가져오는 함수
+     *
+     * 가져온 함수를 setIsCounter 에 담아 새로 rendering 되게 함
+     */
     const getCounter = async () => {
       try {
         const alertCounterResponse = await getAlertCounter(chatroomChannelId);
@@ -58,6 +68,7 @@ IChatListProps) {
     };
 
     if (recentChat) {
+      // 최근 채팅이 존재하면 최근 채팅의 생성 시간을 dateFormatter 로 변환
       dateFormatter(recentChat.regdate, setIsTime);
     }
     getImage();

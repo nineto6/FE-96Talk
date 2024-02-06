@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import Hood from "../components/Hood";
 import {
   getDuplicateEmail,
@@ -56,13 +55,14 @@ export default function Signup() {
       }
     } else {
       console.log("WRONG");
+      setIsLoginMessage("");
     }
   };
 
   const onDuplicateNicknameCheck = async () => {
     const target = getValues("memberNickname");
     const isValid = await trigger("memberNickname");
-    if (isValid) {
+    if (isValid && target) {
       // 유효성 검사를 통과했을 경우
       try {
         const response = await getDuplicateNickname(target);
@@ -79,6 +79,7 @@ export default function Signup() {
       }
     } else {
       console.log("WRONG");
+      setIsNicknameMessage("");
     }
   };
 

@@ -4,6 +4,14 @@ interface IMessengerProps {
   isShake: boolean;
 }
 
+/**
+ * 알림 component
+ *
+ * @param text 알림의 내용
+ * @param setIsError 알림을 끌 때 사용하는 toggle 함수
+ * @param isShake 진동 여부
+ * @returns
+ */
 export default function Messenger({
   text,
   setIsError,

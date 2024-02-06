@@ -3,6 +3,15 @@ interface ISideTabBarProps {
   deleteChatRoom: Function;
 }
 
+/**
+ * 채팅방 내 사이드 탭
+ *
+ * 추후 ver2. 에 단체대화방이 생기면 대화 방 내 멤버 리스트 출력 예정
+ *
+ * @param setIsTab 탭을 사용해 표시 여부 toggle 함수
+ * @param deleteChatRoom 채팅방 나가기 함수
+ * @returns
+ */
 export default function SideTabBar({
   setIsTab,
   deleteChatRoom,

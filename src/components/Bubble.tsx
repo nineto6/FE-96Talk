@@ -8,10 +8,18 @@ interface IBubbleProps {
   //   말하는 사람이 본인인지
 }
 
+/**
+ * 채팅 방 내 채팅 말풍선 components
+ * @param text 채팅내용 @param speaker 화자 본인여부 @param time 대화 시간
+ * @returns
+ */
 export default function Bubble({ text, speaker, time }: IBubbleProps) {
   const [isTime, setIsTime] = useState<string>("");
-  const [current, setCurrent] = useState<string>("");
+  // 현재 시간을 담는 state
 
+  /**
+   * 생성 시 시간으로 들어온 값을 dateFormatter 로 시간을 오전/오후로 변환
+   */
   useEffect(() => {
     dateFormatter(time, setIsTime);
   }, []);

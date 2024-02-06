@@ -14,6 +14,14 @@ interface ISearchProps {
   list: IFriendProps[];
 }
 
+/**
+ * 친구목록에 존재하는 친구를 검색하는 component
+ *
+ * @param title
+ * @param onToggleSearch modal 창을 끄기 위한 toggle 함수
+ * @param list 검색 결과와 비슷한 친구를 가져오는 list
+ * @returns
+ */
 export default function Search({ title, onToggleSearch, list }: ISearchProps) {
   const [findList, setFindList] = useState("");
   const nav = useNavigate();
@@ -22,7 +30,6 @@ export default function Search({ title, onToggleSearch, list }: ISearchProps) {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
   } = useForm<ISearchDataProps>();
 

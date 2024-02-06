@@ -8,6 +8,13 @@ interface IChatTopBarProps {
   setIsLoading: Function;
 }
 
+/**
+ * 채팅방 상단 바
+ *
+ * @param isPartner 채팅방에 포함되는 사람 list. 추후 단체톡방을 만들 예정이므로 list 형식
+ * @param setIsLoading 로딩 여부
+ * @returns
+ */
 export default function ChatTopBar({
   isPartner,
   setIsLoading,

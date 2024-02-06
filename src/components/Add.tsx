@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IFriendProps } from "../pages/Main";
-import { useNavigate } from "react-router-dom";
 import { ring } from "ldrs";
-import axios from "axios";
 import { getSearchProfileList, postAddFriend } from "../apis/apis";
-import { IMyProfileProps } from "./MyProfile";
 import SearchProfile from "./SearchProfile";
 
+/**
+ * 링 모양 animation
+ */
 ring.register();
 
 export interface IAddDataProps {
@@ -33,6 +33,12 @@ interface IPaginationProps {
   totalRecordCount: number;
 }
 
+/**
+ * 친구추가 components
+ *
+ * @param param0
+ * @returns
+ */
 export default function Add({ title, onToggleAdd, list }: IAddProps) {
   const [findList, setFindList] = useState<IFriendProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,20 +53,19 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
     prev: false,
     next: false,
   });
-  const [isKeyword, setIsKeyword] = useState<string>("");
+  // 이전페이지와 다음페이지로 움직일 수 있는지
   const [isPagination, setIsPagination] = useState<IPaginationProps>();
   const [pageTab, setPageTab] = useState<number[]>([1, 2, 3, 4, 5]);
-  const nav = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
   } = useForm<IAddDataProps>();
 
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  // 애니메이션 적용 시 해당 특정 tag 지정
 
   const onAddFriend = async (targetName: string) => {
     try {
@@ -72,10 +77,13 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
     }
   };
 
+  /**
+   * 유효성을 통과 했을 경우 검색 키워드가 공백이 아닐 시
+   * 해당 특정 키워드와 일치하는 profile 을 가져와 나열
+   */
   const onValid = async () => {
     setFindList([]);
     // 리스트를 비워줌
-    // console.log(isDataSet);
 
     if (isDataSet.keyword !== "") {
       setIsLoading(true);
@@ -106,8 +114,10 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
     }
   };
 
+  /**
+   *  페이지 값을 가져와 dataSet 에 저장
+   */
   const onGetPage = (event: React.MouseEvent<HTMLHeadElement>) => {
-    // console.log(event.currentTarget.innerText);
     const page = parseInt(event.currentTarget.innerText);
     setIsDataSet((current) => {
       return {
@@ -117,6 +127,9 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
     });
   };
 
+  /**
+   * prev 와 next 로 page 조작을 하며 페이지 전환
+   */
   const onChangePage = (event: React.MouseEvent<SVGSVGElement>) => {
     // console.log(event.currentTarget.id);
     let order = event.currentTarget.id;
@@ -148,8 +161,10 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
     }
   };
 
+  /**
+   * 검색 키워드를 변경하는 함수
+   */
   const onChangeKeyword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(event.currentTarget.value);
     const keyword = event.currentTarget.value;
     setIsDataSet((current) => {
       return {
@@ -159,6 +174,11 @@ export default function Add({ title, onToggleAdd, list }: IAddProps) {
     });
   };
 
+  /**
+   * 첫 마운트 시 observer 를 사용해 검색 창이 뜰 때의 animation 지정
+   *
+   * 또한 dataSet 이 변경 됐을 시 새로 화면을 보여줘야 하기 때문에 [] 에 isDataSet 추가
+   */
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {

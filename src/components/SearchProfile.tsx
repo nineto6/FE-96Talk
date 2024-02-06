@@ -10,6 +10,16 @@ interface ISearchProfileProps {
   canAdd: boolean;
 }
 
+/**
+ * 검색한 결과와 일치하는 친구 정보 component
+ *
+ * @param memberNickname 친구 닉네임
+ * @param imageName 친구 이미지
+ * @param onAddFriend 친구 추가 함수 (기존에 친구면 나타나지 않음)
+ * @param type 이미지 타입
+ * @param canAdd 친구 추가 할 수 있는지
+ * @returns
+ */
 export default function SearchProfile({
   memberNickname,
   imageName,
@@ -37,7 +47,6 @@ export default function SearchProfile({
             setIsImage(base64data);
           };
         } finally {
-          //   setIsLoading(false);
         }
       }
     };

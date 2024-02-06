@@ -7,15 +7,15 @@ import { useGlobalAlertCounter } from "../utils/notification";
 import { isMobile } from "react-device-detect";
 import tokenRefresher from "../apis/refresh";
 
-interface IBubbleProps {
-  channelId: string;
-  count: number;
-}
-
 interface ISideBarProps {
   isTotalCount: number;
 }
 
+/**
+ * 좌측 사이드 바 component
+ * @param isTotalCount 전체 알람 수
+ * @returns
+ */
 export default function SideBar({ isTotalCount }: ISideBarProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isAlert, setIsAlert] = useState(!isMobile && Notification.permission);

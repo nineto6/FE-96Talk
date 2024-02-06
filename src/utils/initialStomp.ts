@@ -3,6 +3,10 @@ import { globalConfig, stompClient } from "./globals";
 import SockJS from "sockjs-client";
 import { isMobile } from "react-device-detect";
 
+/**
+ * Stomp 가 처음 실행 될 때 작동 되는 함수
+ * @param memberNickname 현재 로그인 된 닉네임
+ */
 export default function initialStomp(memberNickname: string) {
   const token = globalConfig.isToken;
   stompClient.instance = Stomp.over(() => {

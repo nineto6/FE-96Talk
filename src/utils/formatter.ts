@@ -1,5 +1,8 @@
-import { AxiosError } from "axios";
-
+/**
+ * 날짜 타입을 변환해서 오전/오후 로 변환 해주는 함수
+ * @param time
+ * @param setIsTime
+ */
 export default function dateFormatter(time: string, setIsTime: Function) {
   const currentTime = new Date();
   const [year, month, day] = time.split("T")[0].split("-").map(Number);

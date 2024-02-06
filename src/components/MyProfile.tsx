@@ -10,6 +10,10 @@ export interface IMyProfileProps {
   type: string | null;
 }
 
+/**
+ * 내정보를 가져오는 component
+ * @returns
+ */
 export default function MyProfile() {
   const nav = useNavigate();
   const [isData, setIsData] = useState<IMyProfileProps>({
@@ -18,6 +22,8 @@ export default function MyProfile() {
     profileStateMessage: "",
     type: null,
   });
+  // 첫 마운트 될 때 초깃값이 존재해야 하므로 정해주어야 함
+
   const [isLoading, setIsLoading] = useState(false);
   const [isImage, setIsImage] = useState<string>("");
 

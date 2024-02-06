@@ -16,7 +16,6 @@ export interface IChatListProps {
   chatroomChannelId: string;
   profileResponseList: IUserProps[];
   recentChat: IRecentProps;
-  // counter: number;
 }
 
 export interface IRecentProps {
@@ -29,6 +28,10 @@ export interface IAlertProps {
   count: number;
 }
 
+/**
+ * 채팅방 목록 페이지
+ * @returns
+ */
 export default function Chats() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isList, setIsList] = useState<IChatListProps[]>([]);

@@ -3,6 +3,11 @@ import { globalConfig } from "../utils/globals";
 import initialStomp from "../utils/initialStomp";
 import { getProfileData } from "./apis";
 
+/**
+ * 토큰 만료시 토큰을 재발급 받기 위함 함수
+ *
+ * @param callback 이미 호출된 이전의 함수
+ */
 export const refreshToken = async (callback: any) => {
   await axios
     .post(`${process.env.REACT_APP_BASE_URL}api/auth`)

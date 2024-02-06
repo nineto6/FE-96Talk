@@ -3,8 +3,6 @@ import SideBar from "../components/SideBar";
 import TopBar from "../components/TopBar";
 import { useForm } from "react-hook-form";
 import Hood from "../components/Hood";
-import axios from "axios";
-import { access } from "fs";
 import { useNavigate } from "react-router-dom";
 import {
   getProfileData,
@@ -13,7 +11,6 @@ import {
   patchProfileData,
 } from "../apis/apis";
 import Loading from "../components/Loading";
-import { globalConfig } from "../utils/globals";
 import { useGlobalAlertCounter } from "../utils/notification";
 
 export interface IProfileProps {
@@ -22,6 +19,11 @@ export interface IProfileProps {
   type: string | null;
 }
 
+/**
+ * 내 프로필 정보를 볼 수 있는 페이지
+ *
+ * @returns
+ */
 export default function Profile() {
   const [isModify, setIsModify] = useState(true);
   const [imagePreview, setImagePreview] = useState<string>("");
