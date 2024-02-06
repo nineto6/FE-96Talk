@@ -1,46 +1,142 @@
-# Getting Started with Create React App
+## 96TALK 🕤 - 양방향 통신 웹 메신저 서비스 📨
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> 2023 서일대학교 NINETO6 팀 프로젝트
 
-## Available Scripts
+<br/>
 
-In the project directory, you can run:
+## 🧑‍💻 팀원 소개
 
-### `npm start`
+<table>
+  <tr>
+  <td align="center">
+	    <a href="https://github.com/chang-seop">
+	    	<img src="https://avatars.githubusercontent.com/u/66265875?v=4" width="100px;" alt=""/>
+	    	<br/>
+	    	<sub>
+	    	<b>신창섭</b>
+	    	<br/>
+	    	<img src="https://us-central1-progress-markdown.cloudfunctions.net/progress/100"/>
+	        </sub>
+	    </a>
+	    <br />
+	</td>
+  <td align="center">
+	    <a href="https://github.com/ezurno">
+	    	<img src="https://avatars.githubusercontent.com/u/108059303?v=4?s=100" width="100px;" alt=""/>
+	    	<br/>
+	    	<sub>
+	    	<b>이준모</b>
+	    	<br/>
+	    	<img src="https://us-central1-progress-markdown.cloudfunctions.net/progress/100"/>
+	        </sub>
+	    </a>
+	</td>
+  </tr>
+</table>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<br/>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## ⚡프로젝트 소개
 
-### `npm test`
+> 2023.06 - 2023.11
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+양방향 통신 웹 메신저 서비스
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+평소에 자주쓰던 'KAKAOTALK', 'LINE' 을 보며 웹에서도 구현해볼 수 있을까? 라는 의문에 시작하게 된 프로젝트.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+웹 브라우저에는 채팅방을 생성하여 실시간으로 채팅할 수 있는 플랫폼이 많이 없다고 생각했었는데
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+비 연결성 프로토콜인 `Http` 통신 방식에 관해 공부하고 있던 중 `Websocket` 과 같은 양방향 네트워크 프로토콜 기반으로 동작하는
 
-### `npm run eject`
+`Simple Text Oriented Messaging Protocol(STOMP)`에 대해 알게 되어 구현해 보고자 했다.
+ 
+ <ul>
+  <li>실시간으로 서로의 채팅을 볼 순 없을까? 연결형 프로토을 사용하자!</li>
+  <li>전송 후에 연결이 끊기는 `HTTP` 를 유지 할 순 없을까? `WebSocket` 을 활용하자! 클라이언트와 서버 간에 데이터를 양방향으로 전송</li>
+  <li>메세지를 보냄으로서 생기는 지연은 어떻게 해결할까? `Message Broker` 를 사용하자!</li>
+</ul>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<br/>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## ⚙️ 기술 정보
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### Frontend
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+<div>
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=000000"/>
+<img src="https://img.shields.io/badge/typescript-3178C6?style=flat-square&logo=typescript&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/react-61DAFB?style=flat-square&logo=react&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/html5-E34F26?style=flat-square&logo=html5&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/css3-1572B6?style=flat-square&logo=css3&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=flat-square&logo=tailwindcss&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/vite-646CFF?style=flat-square&logo=vite&logoColor=FEC111"/>
+</div>
 
-## Learn More
+#### Backend
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<div>
+<img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/spring-6DB33F?style=flat-square&logo=spring&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/springsecurity-6DB33F?style=flat-square&logo=springsecurity&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/JWT-007396?style=flat-square&logo=jWT&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/STOMP-007396?style=flat-square&logo=STOMP&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/mybatis-001202?style=flat-square&logo=mybatis&logoColor=FFFFFF"/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+<img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/redis-DC382D?style=flat-square&logo=redis&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/mongodb-47A248?style=flat-square&logo=mongodb&logoColor=FFFFFF"/>
+
+</div>
+
+
+#### Tool
+
+<div>
+<img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=flat-square&logo=visualstudiocode&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/intellij-000000?style=flat-square&logo=intellijidea&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=FFFFFF"/>
+<img src="https://img.shields.io/badge/swagger-85EA2D?style=flat-square&logo=swagger&logoColor=FFFFFF"/>
+</div>
+
+## 🌳 개발 환경
+
+#### Frontend
+
+- Project: React ^18.2.0
+- Language: typescript ^4.9.5
+- Dependencies
+   - react-hook-form: ^7.48.2
+   - react-helmet: ^6.1.0
+   - axios: ^1.6.1
+   - sockjs-client: ^1.6.1
+   - @stomp/stompjs: ^7.0.0
+   - tailwindcss: ^3.3.5
+
+
+#### Backend
+
+- Project: Gradle
+- SpringBoot: 2.7.17
+- Language: Java 11
+- Dependencies
+   - jjwt: 0.9.1
+   - json-simple: 1.1.1
+   - jaxb-runtime: 2.3.2
+   - springdoc-openapi-ui: 1.7.0
+   - mybatis-spring-boot-starter:2.3.1
+   - spring-boot-starter-security
+   - spring-boot-starter-web
+   - spring-boot-starter-websocket
+   - spring-boot-starter-validation
+   - spring-boot-starter-data-mongodb
+   - spring-boot-starter-data-redis
+   - spring-boot-starter-test
+   - mysql-connector-j
+   - lombok
+
+
+<br/>
+
+## 🔍 프로젝트 상세
